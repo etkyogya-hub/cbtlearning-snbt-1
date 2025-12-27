@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SNBT Motion Scene</title>
+<title>SNBT Thinking System</title>
 
 <style>
 body{
@@ -13,28 +13,26 @@ body{
   color:#e5e7eb;
   overflow:hidden;
 }
+
+/* ===== SCENE BASE ===== */
 .scene{
-  height:100vh;
-  position:relative;
+  position:absolute;
+  inset:0;
+  display:none;
 }
+.scene.active{display:block}
 
 /* ===== HERO WORD ===== */
 .hero{
   position:absolute;
-  top:42%;
+  top:45%;
   left:50%;
   transform:translate(-50%,-50%);
   font-size:18vw;
   font-weight:900;
-  z-index:2;
-  animation:heroZoom 2.2s ease forwards;
-}
-@keyframes heroZoom{
-  from{transform:translate(-50%,-50%) scale(.7);opacity:0}
-  to{transform:translate(-50%,-50%) scale(1);opacity:1}
 }
 
-/* ===== CIRCULAR TEXT + TRAIL ===== */
+/* ===== CIRCULAR TEXT ===== */
 .circle-wrap{
   position:absolute;
   top:8%;
@@ -46,7 +44,6 @@ body{
 .circle{
   position:absolute;
   inset:0;
-  border-radius:50%;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -55,18 +52,35 @@ body{
   text-transform:uppercase;
   animation:spinPause 8s ease-in-out infinite;
 }
-.circle.t1{opacity:.25}
-.circle.t2{opacity:.15; transform:rotate(12deg)}
-.circle.t3{opacity:.08; transform:rotate(24deg)}
+.trail1{opacity:.35}
+.trail2{opacity:.2; transform:rotate(10deg)}
+.trail3{opacity:.1; transform:rotate(20deg)}
 
 @keyframes spinPause{
   0%{transform:rotate(0)}
   40%{transform:rotate(360deg)}
-  60%{transform:rotate(360deg)}
+  55%{transform:rotate(360deg)}
   100%{transform:rotate(720deg)}
 }
 
-/* ===== PHONE 3D ===== */
+/* ===== FLAT PAUSE TEXT ===== */
+.flat{
+  position:absolute;
+  top:20%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:18px;
+  letter-spacing:3px;
+  opacity:0;
+  animation:flatShow 8s ease-in-out infinite;
+}
+@keyframes flatShow{
+  0%,35%{opacity:0}
+  45%,60%{opacity:1}
+  100%{opacity:0}
+}
+
+/* ===== PHONE ===== */
 .phone{
   position:absolute;
   right:6%;
@@ -76,12 +90,7 @@ body{
   border-radius:24px;
   background:linear-gradient(160deg,#0f172a,#020617);
   transform:rotateY(-18deg) rotateX(6deg);
-  box-shadow:
-    0 40px 60px rgba(0,0,0,.6),
-    inset 0 0 0 2px rgba(255,255,255,.08);
-}
-.phone.light{
-  background:linear-gradient(160deg,#e5e7eb,#94a3b8);
+  box-shadow:0 40px 60px rgba(0,0,0,.6);
 }
 .screen{
   margin:14px;
@@ -91,7 +100,7 @@ body{
   overflow:hidden;
 }
 
-/* ===== CBT UI ===== */
+/* CBT */
 .cbt{
   font-size:11px;
   animation:scrollCBT 7s ease-in-out infinite;
@@ -101,63 +110,64 @@ body{
   justify-content:space-between;
   padding:10px;
   background:#0f172a;
-  border-bottom:1px solid #1e293b;
 }
 .timer{color:#38bdf8}
 .progress{
-  width:42px;
-  height:4px;
-  background:#1e293b;
-  border-radius:2px;
-  overflow:hidden;
+  width:40px;height:4px;background:#1e293b;border-radius:2px;
 }
-.progress span{
-  display:block;
-  width:60%;
-  height:100%;
-  background:#38bdf8;
-}
-.question{
-  padding:12px;
-  line-height:1.4;
-}
+.progress span{display:block;width:60%;height:100%;background:#38bdf8}
+.question{padding:12px}
 .option{
   margin:8px 12px;
   padding:10px;
-  border-radius:8px;
   border:1px solid #1e293b;
+  border-radius:8px;
 }
-.option.correct{
-  border-color:#38bdf8;
-  background:rgba(56,189,248,.1);
-}
+.option.correct{border-color:#38bdf8}
 
-/* scroll with pause */
 @keyframes scrollCBT{
   0%{transform:translateY(0)}
   45%{transform:translateY(-34%)}
   65%{transform:translateY(-34%)}
   100%{transform:translateY(0)}
 }
+
+/* TAP */
+.tap{
+  position:fixed;
+  bottom:14px;
+  right:14px;
+  font-size:11px;
+  opacity:.5;
+}
 </style>
 </head>
 
 <body>
 
-<div class="scene">
-
-  <!-- CIRCULAR TEXT -->
-  <div class="circle-wrap">
-    <div class="circle t3">SNBT • THINKING • SYSTEM •</div>
-    <div class="circle t2">SNBT • THINKING • SYSTEM •</div>
-    <div class="circle t1">SNBT • THINKING • SYSTEM •</div>
-    <div class="circle">SNBT • THINKING • SYSTEM •</div>
-  </div>
-
-  <!-- HERO WORD -->
+<!-- ===== SCENE 1 ===== -->
+<div class="scene active">
   <div class="hero">SNBT</div>
+</div>
 
-  <!-- PHONE -->
+<!-- ===== SCENE 2 ===== -->
+<div class="scene">
+  <div class="circle-wrap">
+    <div class="circle trail3">SNBT THINKING SYSTEM •</div>
+    <div class="circle trail2">SNBT THINKING SYSTEM •</div>
+    <div class="circle trail1">SNBT THINKING SYSTEM •</div>
+    <div class="circle">SNBT THINKING SYSTEM •</div>
+  </div>
+</div>
+
+<!-- ===== SCENE 3 ===== -->
+<div class="scene">
+  <div class="flat">SNBT THINKING SYSTEM</div>
+</div>
+
+<!-- ===== SCENE 4 ===== -->
+<div class="scene">
+  <div class="hero">CBT</div>
   <div class="phone">
     <div class="screen">
       <div class="cbt">
@@ -165,21 +175,46 @@ body{
           <div class="timer">09:42</div>
           <div class="progress"><span></span></div>
         </div>
-
-        <div class="question">
-          Jika sebuah wacana menyatakan hubungan sebab–akibat,
-          maka simpulan yang tepat adalah …
-        </div>
-
-        <div class="option">A. Menyebutkan ulang isi teks</div>
-        <div class="option">B. Menyimpulkan tanpa dasar</div>
-        <div class="option correct">C. Mengaitkan sebab dan akibat</div>
-        <div class="option">D. Menambah opini baru</div>
+        <div class="question">Hubungan sebab–akibat ditentukan oleh …</div>
+        <div class="option correct">Logika argumen</div>
       </div>
     </div>
   </div>
-
 </div>
+
+<!-- ===== SCENE 5 ===== -->
+<div class="scene">
+  <div class="hero">RATIONALE</div>
+</div>
+
+<!-- ===== SCENE 6 ===== -->
+<div class="scene">
+  <div class="hero">MANDIRI</div>
+</div>
+
+<div class="tap">tap →</div>
+
+<script>
+const scenes=document.querySelectorAll('.scene');
+let i=0;
+const delay=3500;
+
+function show(n){
+  scenes.forEach(s=>s.classList.remove('active'));
+  scenes[n].classList.add('active');
+}
+function next(){
+  i=(i+1)%scenes.length;
+  show(i);
+}
+let timer=setInterval(next,delay);
+
+document.body.addEventListener('click',()=>{
+  clearInterval(timer);
+  next();
+  timer=setInterval(next,delay);
+});
+</script>
 
 </body>
 </html>
