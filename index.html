@@ -1,150 +1,127 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Thinking System</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SNBT Motion</title>
 
 <style>
-:root{
-  --bg:#020617;
-  --panel:#0f172a;
-  --line:#1e293b;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-}
-*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont;
-  background:linear-gradient(180deg,#020617,#000);
-  color:var(--text);
+  background:#020617;
+  color:#e5e7eb;
+  font-family:system-ui;
+  overflow:hidden;
 }
-.slide{
-  min-height:100vh;
-  padding:36px 22px 56px;
-  display:none;
+.scene{
+  height:100vh;
+  display:flex;
   flex-direction:column;
   justify-content:center;
-  animation:fade .4s ease;
+  align-items:center;
+  position:relative;
 }
-.slide.active{display:flex}
-h1{font-size:22px;line-height:1.35;margin:0 0 16px}
-p{font-size:15px;line-height:1.6;color:#cbd5f5;margin:0 0 14px}
-.brand{
-  margin-top:28px;
+
+/* BIG WORD */
+.big{
+  font-size:18vw;
+  font-weight:900;
+  line-height:1;
+  animation:zoom 2.8s ease forwards;
+}
+
+/* STACK WORD */
+.stack{
+  position:absolute;
+  bottom:18%;
+  font-size:6vw;
+  opacity:0;
+  animation:rise 2s ease forwards;
+  animation-delay:1.2s;
+}
+
+/* CIRCLE TEXT */
+.circle{
+  position:absolute;
+  top:8%;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  border:1px dashed #334155;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   font-size:12px;
-  color:var(--muted);
-  letter-spacing:.04em;
+  text-transform:uppercase;
+  animation:spin 12s linear infinite;
 }
-.tap{
-  position:fixed;
-  bottom:16px;
-  right:16px;
+
+/* PHONE */
+.phone{
+  position:absolute;
+  right:8%;
+  bottom:10%;
+  width:140px;
+  height:260px;
+  border:2px solid #64748b;
+  border-radius:18px;
+  overflow:hidden;
+}
+.phone .screen{
+  background:#0f172a;
+  height:100%;
+  animation:scroll 5s linear infinite;
+}
+.phone .item{
+  padding:12px;
+  border-bottom:1px solid #1e293b;
   font-size:12px;
-  color:#94a3b8;
-  opacity:.6;
 }
-@keyframes fade{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:none}
+
+/* ANIMATIONS */
+@keyframes zoom{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes rise{
+  from{transform:translateY(20px);opacity:0}
+  to{transform:none;opacity:1}
+}
+@keyframes spin{
+  from{transform:rotate(0)}
+  to{transform:rotate(360deg)}
+}
+@keyframes scroll{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-40%)}
+  100%{transform:translateY(0)}
 }
 </style>
 </head>
 
 <body>
 
-<!-- SLIDE 1 : HOOK -->
-<section class="slide active">
-  <h1>SNBT Tidak Menguji Hafalan.</h1>
-  <p>Ia menguji cara berpikir di bawah tekanan waktu.</p>
-</section>
+<div class="scene">
 
-<!-- SLIDE 2 : PROBLEM -->
-<section class="slide">
-  <h1>Banyak Soal ≠ Siap Ujian</h1>
-  <p>
-    Mayoritas siswa gagal bukan karena kurang pintar,
-    tapi karena tidak terbiasa berpikir seperti saat ujian.
-  </p>
-</section>
-
-<!-- SLIDE 3 : SOLUSI -->
-<section class="slide">
-  <h1>Ini Bukan Bimbel</h1>
-  <p>
-    Ini adalah simulasi CBT SNBT aktual,
-    dengan waktu, tekanan, dan pola soal nyata.
-  </p>
-</section>
-
-<!-- SLIDE 4 : RATIONALE -->
-<section class="slide">
-  <h1>Rationale Generator</h1>
-  <p>
-    Setiap soal dibahas:  
-    mengapa satu jawaban benar  
-    dan mengapa yang lain salah.
-  </p>
-</section>
-
-<!-- SLIDE 5 : MANDIRI -->
-<section class="slide">
-  <h1>Belajar Mandiri, Tapi Terarah</h1>
-  <p>
-    Tanpa ceramah.  
-    Tanpa ketergantungan guru.  
-    Fokus pada pola berpikir ujian.
-  </p>
-</section>
-
-<!-- SLIDE 6 : ORANG TUA -->
-<section class="slide">
-  <h1>Untuk Orang Tua</h1>
-  <p>
-    Sistem ini tidak menjanjikan kelulusan instan.
-    Fokusnya adalah membangun cara berpikir rasional
-    dan konsisten.
-  </p>
-</section>
-
-<!-- SLIDE 7 : BRAND -->
-<section class="slide">
-  <h1>SNBT Thinking System</h1>
-  <p>
-    Dibangun sebagai sistem belajar,
-    bukan produk jualan cepat.
-  </p>
-  <div class="brand">
-    Built by G. Asfarrasyid
+  <div class="circle">
+    SNBT • THINKING • SYSTEM •
   </div>
-</section>
 
-<div class="tap">tap / tunggu →</div>
+  <div class="big">SNBT</div>
 
-<script>
-const slides = document.querySelectorAll(".slide");
-let i = 0;
-const delay = 3500; // auto 3.5 detik
+  <div class="stack">BUKAN HAFALAN</div>
 
-function show(n){
-  slides.forEach(s=>s.classList.remove("active"));
-  slides[n].classList.add("active");
-}
+  <div class="phone">
+    <div class="screen">
+      <div class="item">Soal 1</div>
+      <div class="item">Soal 2</div>
+      <div class="item">Rationale</div>
+      <div class="item">Pembahasan</div>
+      <div class="item">Pola</div>
+    </div>
+  </div>
 
-function next(){
-  i = (i + 1) % slides.length;
-  show(i);
-}
-
-let timer = setInterval(next, delay);
-
-document.body.addEventListener("click",()=>{
-  clearInterval(timer);
-  next();
-  timer = setInterval(next, delay);
-});
-</script>
+</div>
 
 </body>
 </html>
