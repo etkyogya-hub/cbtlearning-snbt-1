@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SNBT Thinking System</title>
+
+<style>
+:root{
+  --bg:#020617;
+  --panel:#0f172a;
+  --line:#1e293b;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  background:linear-gradient(180deg,#020617,#000);
+  color:var(--text);
+}
+.slide{
+  min-height:100vh;
+  padding:36px 22px 56px;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  animation:fade .4s ease;
+}
+.slide.active{display:flex}
+h1{font-size:22px;line-height:1.35;margin:0 0 16px}
+p{font-size:15px;line-height:1.6;color:#cbd5f5;margin:0 0 14px}
+.brand{
+  margin-top:28px;
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.04em;
+}
+.tap{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  font-size:12px;
+  color:#94a3b8;
+  opacity:.6;
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- SLIDE 1 : HOOK -->
+<section class="slide active">
+  <h1>SNBT Tidak Menguji Hafalan.</h1>
+  <p>Ia menguji cara berpikir di bawah tekanan waktu.</p>
+</section>
+
+<!-- SLIDE 2 : PROBLEM -->
+<section class="slide">
+  <h1>Banyak Soal ≠ Siap Ujian</h1>
+  <p>
+    Mayoritas siswa gagal bukan karena kurang pintar,
+    tapi karena tidak terbiasa berpikir seperti saat ujian.
+  </p>
+</section>
+
+<!-- SLIDE 3 : SOLUSI -->
+<section class="slide">
+  <h1>Ini Bukan Bimbel</h1>
+  <p>
+    Ini adalah simulasi CBT SNBT aktual,
+    dengan waktu, tekanan, dan pola soal nyata.
+  </p>
+</section>
+
+<!-- SLIDE 4 : RATIONALE -->
+<section class="slide">
+  <h1>Rationale Generator</h1>
+  <p>
+    Setiap soal dibahas:  
+    mengapa satu jawaban benar  
+    dan mengapa yang lain salah.
+  </p>
+</section>
+
+<!-- SLIDE 5 : MANDIRI -->
+<section class="slide">
+  <h1>Belajar Mandiri, Tapi Terarah</h1>
+  <p>
+    Tanpa ceramah.  
+    Tanpa ketergantungan guru.  
+    Fokus pada pola berpikir ujian.
+  </p>
+</section>
+
+<!-- SLIDE 6 : ORANG TUA -->
+<section class="slide">
+  <h1>Untuk Orang Tua</h1>
+  <p>
+    Sistem ini tidak menjanjikan kelulusan instan.
+    Fokusnya adalah membangun cara berpikir rasional
+    dan konsisten.
+  </p>
+</section>
+
+<!-- SLIDE 7 : BRAND -->
+<section class="slide">
+  <h1>SNBT Thinking System</h1>
+  <p>
+    Dibangun sebagai sistem belajar,
+    bukan produk jualan cepat.
+  </p>
+  <div class="brand">
+    Built by G. Asfarrasyid
+  </div>
+</section>
+
+<div class="tap">tap / tunggu →</div>
+
+<script>
+const slides = document.querySelectorAll(".slide");
+let i = 0;
+const delay = 3500; // auto 3.5 detik
+
+function show(n){
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[n].classList.add("active");
+}
+
+function next(){
+  i = (i + 1) % slides.length;
+  show(i);
+}
+
+let timer = setInterval(next, delay);
+
+document.body.addEventListener("click",()=>{
+  clearInterval(timer);
+  next();
+  timer = setInterval(next, delay);
+});
+</script>
+
+</body>
+</html>
