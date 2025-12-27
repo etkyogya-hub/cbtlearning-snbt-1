@@ -9,210 +9,151 @@
 body{
   margin:0;
   background:#020617;
-  font-family:system-ui;
   color:#e5e7eb;
+  font-family:system-ui;
   overflow:hidden;
 }
 
-/* ===== SCENE BASE ===== */
+/* SCENE */
 .scene{
   position:absolute;
   inset:0;
   display:none;
+  justify-content:center;
+  align-items:center;
 }
-.scene.active{display:block}
+.scene.active{display:flex}
 
-/* ===== HERO WORD ===== */
-.hero{
-  position:absolute;
-  top:45%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:18vw;
+/* BIG WORD */
+.big{
+  font-size:20vw;
   font-weight:900;
+  animation:zoom 2.6s ease forwards;
 }
 
-/* ===== CIRCULAR TEXT ===== */
-.circle-wrap{
+/* STACK WORD */
+.stack{
   position:absolute;
-  top:8%;
-  left:50%;
-  transform:translateX(-50%);
-  width:260px;
-  height:260px;
+  bottom:18%;
+  font-size:6vw;
+  animation:rise 2s ease forwards;
 }
+
+/* CIRCLE TEXT */
 .circle{
   position:absolute;
-  inset:0;
+  top:8%;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  border:1px dashed #334155;
   display:flex;
   justify-content:center;
   align-items:center;
   font-size:12px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  animation:spinPause 8s ease-in-out infinite;
-}
-.trail1{opacity:.35}
-.trail2{opacity:.2; transform:rotate(10deg)}
-.trail3{opacity:.1; transform:rotate(20deg)}
-
-@keyframes spinPause{
-  0%{transform:rotate(0)}
-  40%{transform:rotate(360deg)}
-  55%{transform:rotate(360deg)}
-  100%{transform:rotate(720deg)}
+  animation:spin 12s linear infinite;
 }
 
-/* ===== FLAT PAUSE TEXT ===== */
-.flat{
-  position:absolute;
-  top:20%;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:18px;
-  letter-spacing:3px;
-  opacity:0;
-  animation:flatShow 8s ease-in-out infinite;
-}
-@keyframes flatShow{
-  0%,35%{opacity:0}
-  45%,60%{opacity:1}
-  100%{opacity:0}
-}
-
-/* ===== PHONE ===== */
+/* PHONE MOCKUP */
 .phone{
   position:absolute;
-  right:6%;
-  bottom:6%;
-  width:170px;
-  height:320px;
-  border-radius:24px;
-  background:linear-gradient(160deg,#0f172a,#020617);
-  transform:rotateY(-18deg) rotateX(6deg);
-  box-shadow:0 40px 60px rgba(0,0,0,.6);
-}
-.screen{
-  margin:14px;
-  height:calc(100% - 28px);
-  border-radius:16px;
-  background:#020617;
+  right:8%;
+  bottom:10%;
+  width:150px;
+  height:280px;
+  border:2px solid #64748b;
+  border-radius:20px;
   overflow:hidden;
 }
-
-/* CBT */
-.cbt{
-  font-size:11px;
-  animation:scrollCBT 7s ease-in-out infinite;
-}
-.header{
-  display:flex;
-  justify-content:space-between;
-  padding:10px;
+.screen{
   background:#0f172a;
+  animation:scroll 5s linear infinite;
 }
-.timer{color:#38bdf8}
-.progress{
-  width:40px;height:4px;background:#1e293b;border-radius:2px;
+.item{
+  padding:12px;
+  border-bottom:1px solid #1e293b;
+  font-size:12px;
 }
-.progress span{display:block;width:60%;height:100%;background:#38bdf8}
-.question{padding:12px}
-.option{
-  margin:8px 12px;
-  padding:10px;
-  border:1px solid #1e293b;
-  border-radius:8px;
-}
-.option.correct{border-color:#38bdf8}
 
-@keyframes scrollCBT{
+/* ANIM */
+@keyframes zoom{
+  from{transform:scale(.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes rise{
+  from{transform:translateY(20px);opacity:0}
+  to{opacity:1}
+}
+@keyframes spin{
+  from{transform:rotate(0)}
+  to{transform:rotate(360deg)}
+}
+@keyframes scroll{
   0%{transform:translateY(0)}
-  45%{transform:translateY(-34%)}
-  65%{transform:translateY(-34%)}
+  50%{transform:translateY(-40%)}
   100%{transform:translateY(0)}
-}
-
-/* TAP */
-.tap{
-  position:fixed;
-  bottom:14px;
-  right:14px;
-  font-size:11px;
-  opacity:.5;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== SCENE 1 ===== -->
+<!-- SCENE 1 -->
 <div class="scene active">
-  <div class="hero">SNBT</div>
+  <div class="big">SNBT</div>
 </div>
 
-<!-- ===== SCENE 2 ===== -->
+<!-- SCENE 2 -->
 <div class="scene">
-  <div class="circle-wrap">
-    <div class="circle trail3">SNBT THINKING SYSTEM •</div>
-    <div class="circle trail2">SNBT THINKING SYSTEM •</div>
-    <div class="circle trail1">SNBT THINKING SYSTEM •</div>
-    <div class="circle">SNBT THINKING SYSTEM •</div>
-  </div>
+  <div class="big">BUKAN</div>
+  <div class="stack">HAFALAN</div>
 </div>
 
-<!-- ===== SCENE 3 ===== -->
+<!-- SCENE 3 -->
 <div class="scene">
-  <div class="flat">SNBT THINKING SYSTEM</div>
+  <div class="circle">THINKING • SYSTEM • SNBT</div>
+  <div class="big">UJIAN</div>
+  <div class="stack">POLA BERPIKIR</div>
 </div>
 
-<!-- ===== SCENE 4 ===== -->
+<!-- SCENE 4 -->
 <div class="scene">
-  <div class="hero">CBT</div>
+  <div class="big">CBT</div>
   <div class="phone">
     <div class="screen">
-      <div class="cbt">
-        <div class="header">
-          <div class="timer">09:42</div>
-          <div class="progress"><span></span></div>
-        </div>
-        <div class="question">Hubungan sebab–akibat ditentukan oleh …</div>
-        <div class="option correct">Logika argumen</div>
-      </div>
+      <div class="item">Soal 1</div>
+      <div class="item">Soal 2</div>
+      <div class="item">Rationale</div>
+      <div class="item">Pembahasan</div>
+      <div class="item">Pola</div>
     </div>
   </div>
 </div>
 
-<!-- ===== SCENE 5 ===== -->
+<!-- SCENE 5 -->
 <div class="scene">
-  <div class="hero">RATIONALE</div>
+  <div class="big">MANDIRI</div>
+  <div class="stack">TAPI TERARAH</div>
 </div>
-
-<!-- ===== SCENE 6 ===== -->
-<div class="scene">
-  <div class="hero">MANDIRI</div>
-</div>
-
-<div class="tap">tap →</div>
 
 <script>
 const scenes=document.querySelectorAll('.scene');
 let i=0;
-const delay=3500;
+const delay=3000;
 
 function show(n){
   scenes.forEach(s=>s.classList.remove('active'));
   scenes[n].classList.add('active');
 }
-function next(){
+
+setInterval(()=>{
   i=(i+1)%scenes.length;
   show(i);
-}
-let timer=setInterval(next,delay);
+},delay);
 
 document.body.addEventListener('click',()=>{
-  clearInterval(timer);
-  next();
-  timer=setInterval(next,delay);
+  i=(i+1)%scenes.length;
+  show(i);
 });
 </script>
 
