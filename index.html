@@ -118,11 +118,11 @@ body{
   height:100%;
   object-fit:cover;
   border-radius:12px;
-  transform: scale(0.8);           /* start smaller */
-  transition: transform 5s ease-in-out; /* zoom duration */
+  transform: scale(0.8);
+  transition: transform 5s ease-in-out;
 }
 .rationale.show img{
-  transform: scale(1);             /* zoom in to full */
+  transform: scale(1);
 }
 .fallback{
   position:absolute;
@@ -174,7 +174,7 @@ const hook = document.getElementById("hook");
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 
-const LOOP_DURATION = 9000; // Total loop duration
+const LOOP_DURATION = 9000; // Total loop duration for each image
 const images = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
@@ -190,7 +190,7 @@ function splitWords(el){
 splitWords(quizText);
 splitWords(hook);
 
-/* WORD FLY */
+/* WORD FLY ANIMATION */
 function flyWords(el, radius){
   el.querySelectorAll("span").forEach((span,i)=>{
     const r = span.getBoundingClientRect();
@@ -205,16 +205,15 @@ function flyWords(el, radius){
     setTimeout(()=>{
       const a=Math.random()*Math.PI*2;
       const d=Math.random()*radius+40;
-      clone.style.transform=
-        `translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(2.2)`;
+      clone.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(2.2)`;
       clone.classList.add("out");
-    },i*120);
+    }, i*120);
 
     setTimeout(()=>clone.remove(),1800);
   });
 }
 
-/* RESET */
+/* RESET STATE */
 function resetState(){
   rationale.classList.remove("show");
   image.style.transform = "scale(0.8)";
@@ -222,22 +221,25 @@ function resetState(){
   splitWords(hook);
 }
 
-/* IMAGE SEQUENCE LOOP */
+/* SHOW NEXT IMAGE WITH ZOOM AND LOOP */
 function showNextImage(){
   resetState();
   current = (current + 1) % images.length;
   image.src = images[current];
-  
-  setTimeout(()=>flyWords(quizText,140),1200);
-  setTimeout(()=>flyWords(hook,160),2600);
 
-  setTimeout(()=>{
-    rationale.classList.add("show"); // trigger zoom
-  },4600);
+  image.onload = () => {
+    setTimeout(()=>flyWords(quizText,140),1200);
+    setTimeout(()=>flyWords(hook,160),2600);
+
+    setTimeout(()=>{
+      rationale.classList.add("show"); // trigger zoom + opacity
+    },4600);
+  }
 
   setTimeout(showNextImage, LOOP_DURATION);
 }
 
+// Start the image sequence
 showNextImage();
 </script>
 
