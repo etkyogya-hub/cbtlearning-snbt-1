@@ -6,6 +6,7 @@
 <title>SNBT Thinking System</title>
 
 <style>
+/* ===== BASE ===== */
 body{
   margin:0;
   background:#020617;
@@ -13,8 +14,6 @@ body{
   font-family:system-ui;
   overflow:hidden;
 }
-
-/* SCENE */
 .scene{
   position:absolute;
   inset:0;
@@ -24,37 +23,44 @@ body{
 }
 .scene.active{display:flex}
 
-/* BIG WORD */
-.big{
-  font-size:20vw;
-  font-weight:900;
-  animation:zoom 2.6s ease forwards;
+/* ===== TYPO SCALE ===== */
+:root{
+  --hero: clamp(14rem, 18vw, 22rem);
+  --xl: clamp(6rem, 8vw, 9rem);
+  --md: clamp(2rem, 3.5vw, 3rem);
+  --sm: clamp(1rem, 1.2vw, 1.2rem);
 }
+.hero{font-size:var(--hero);font-weight:900;line-height:1}
+.xl{font-size:var(--xl);font-weight:800}
+.md{font-size:var(--md)}
+.sm{font-size:var(--sm)}
 
-/* STACK WORD */
-.stack{
-  position:absolute;
-  bottom:18%;
-  font-size:6vw;
-  animation:rise 2s ease forwards;
+/* ===== MOTION ===== */
+.punch{animation:punch .9s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes punch{
+  0%{transform:scale(.6);opacity:0}
+  70%{transform:scale(1.05)}
+  100%{transform:scale(1);opacity:1}
 }
+.delay1{animation-delay:.15s}
+.delay2{animation-delay:.3s}
 
-/* CIRCLE TEXT */
-.circle{
+/* ===== ARC TEXT ===== */
+.arc{
   position:absolute;
-  top:8%;
-  width:220px;
-  height:220px;
+  top:6%;
+  width:260px;
+  height:260px;
   border-radius:50%;
-  border:1px dashed #334155;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:12px;
-  animation:spin 12s linear infinite;
+}
+.arc span{
+  position:absolute;
+  left:50%;
+  transform-origin:0 130px;
+  font-size:var(--sm);
 }
 
-/* PHONE MOCKUP */
+/* ===== PHONE ===== */
 .phone{
   position:absolute;
   right:8%;
@@ -74,55 +80,92 @@ body{
   border-bottom:1px solid #1e293b;
   font-size:12px;
 }
-
-/* ANIM */
-@keyframes zoom{
-  from{transform:scale(.5);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-@keyframes rise{
-  from{transform:translateY(20px);opacity:0}
-  to{opacity:1}
-}
-@keyframes spin{
-  from{transform:rotate(0)}
-  to{transform:rotate(360deg)}
-}
 @keyframes scroll{
   0%{transform:translateY(0)}
   50%{transform:translateY(-40%)}
   100%{transform:translateY(0)}
+}
+
+/* ===== PROGRESS ===== */
+#progress{
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+  z-index:10;
+}
+#progress span{
+  width:36px;
+  height:3px;
+  background:#1e293b;
+  border-radius:3px;
+  overflow:hidden;
+}
+#progress span::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:#e5e7eb;
+  transform:translateX(-100%);
+}
+#progress span.active::after{
+  animation:fill linear forwards;
+}
+@keyframes fill{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(0)}
 }
 </style>
 </head>
 
 <body>
 
+<!-- PROGRESS -->
+<div id="progress">
+  <span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
 <!-- SCENE 1 -->
 <div class="scene active">
-  <div class="big">SNBT</div>
+  <div class="hero punch">SNBT</div>
 </div>
 
 <!-- SCENE 2 -->
 <div class="scene">
-  <div class="big">BUKAN</div>
-  <div class="stack">HAFALAN</div>
+  <div class="hero punch">BUKAN</div>
+  <div class="md punch delay2">HAFALAN</div>
 </div>
 
 <!-- SCENE 3 -->
 <div class="scene">
-  <div class="circle">THINKING • SYSTEM • SNBT</div>
-  <div class="big">UJIAN</div>
-  <div class="stack">POLA BERPIKIR</div>
+  <div class="arc">
+    <span style="transform:rotate(-60deg)">P</span>
+    <span style="transform:rotate(-40deg)">O</span>
+    <span style="transform:rotate(-20deg)">L</span>
+    <span style="transform:rotate(0deg)">A</span>
+    <span style="transform:rotate(20deg)">•</span>
+    <span style="transform:rotate(40deg)">B</span>
+    <span style="transform:rotate(60deg)">E</span>
+    <span style="transform:rotate(80deg)">R</span>
+    <span style="transform:rotate(100deg)">P</span>
+    <span style="transform:rotate(120deg)">I</span>
+    <span style="transform:rotate(140deg)">K</span>
+    <span style="transform:rotate(160deg)">I</span>
+    <span style="transform:rotate(180deg)">R</span>
+  </div>
+  <div class="xl punch">UJIAN</div>
 </div>
 
 <!-- SCENE 4 -->
 <div class="scene">
-  <div class="big">CBT</div>
+  <div class="hero punch">CBT</div>
   <div class="phone">
     <div class="screen">
-      <div class="item">Soal 1</div>
-      <div class="item">Soal 2</div>
+      <div class="item">Soal</div>
+      <div class="item">Pilihan</div>
       <div class="item">Rationale</div>
       <div class="item">Pembahasan</div>
       <div class="item">Pola</div>
@@ -132,28 +175,55 @@ body{
 
 <!-- SCENE 5 -->
 <div class="scene">
-  <div class="big">MANDIRI</div>
-  <div class="stack">TAPI TERARAH</div>
+  <div class="hero punch">MANDIRI</div>
+  <div class="md punch delay2">TAPI TERARAH</div>
+</div>
+
+<!-- SCENE 6 -->
+<div class="scene">
+  <div class="hero punch">TIDAK</div>
+  <div class="md punch delay2">JANJI INSTAN</div>
+</div>
+
+<!-- SCENE 7 -->
+<div class="scene">
+  <div class="xl punch">SYSTEM</div>
+  <div class="sm punch delay2">BUILT BY G. ASFARRASYID</div>
 </div>
 
 <script>
 const scenes=document.querySelectorAll('.scene');
-let i=0;
+const bars=document.querySelectorAll('#progress span');
+let index=0;
 const delay=3000;
 
 function show(n){
   scenes.forEach(s=>s.classList.remove('active'));
+  bars.forEach(b=>{
+    b.classList.remove('active');
+    b.style.animation='none';
+    b.offsetHeight;
+  });
   scenes[n].classList.add('active');
+  bars[n].classList.add('active');
+  bars[n].style.animationDuration=delay+'ms';
 }
 
-setInterval(()=>{
-  i=(i+1)%scenes.length;
-  show(i);
+show(0);
+
+let timer=setInterval(()=>{
+  index=(index+1)%scenes.length;
+  show(index);
 },delay);
 
 document.body.addEventListener('click',()=>{
-  i=(i+1)%scenes.length;
-  show(i);
+  clearInterval(timer);
+  index=(index+1)%scenes.length;
+  show(index);
+  timer=setInterval(()=>{
+    index=(index+1)%scenes.length;
+    show(index);
+  },delay);
 });
 </script>
 
