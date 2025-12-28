@@ -160,7 +160,7 @@ body{
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
     </div>
-    <div class="quiz-text" id="quizText">Jika 3x + 5 = 20, maka nilai x adalah</div>
+    <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah">Jika 3x + 5 = 20, maka nilai x adalah</div>
     <div class="hook-promo">SNBT tanpa bimbingan tapi detail dengan Rationale Generator</div>
     <div class="branding">ETK Yogya</div>
   </div>
@@ -180,30 +180,31 @@ const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 const quizText = document.getElementById("quizText");
 
-// Split quiz text into spans for flying words
+// Split quiz text into spans
 function splitWords(el){
   const text = el.dataset.text || el.innerText;
   el.dataset.text = text;
   el.innerHTML = text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
 }
-splitWords(quizText);
 
 // Fly words function
 function flyWords(el, radius){
+  const parent = el.parentElement;
+  const screenRect = parent.getBoundingClientRect();
+
   el.querySelectorAll("span").forEach((span,i)=>{
     const rect = span.getBoundingClientRect();
-    const screenRect = el.parentElement.getBoundingClientRect();
 
     const clone = span.cloneNode(true);
     clone.className="word-fly";
     clone.style.left = rect.left - screenRect.left + "px";
     clone.style.top = rect.top - screenRect.top + "px";
-    el.parentElement.appendChild(clone);
+    parent.appendChild(clone);
 
     setTimeout(()=>{
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * radius + 20;
-      clone.style.transform=`translate(${Math.cos(angle)*distance}px,${Math.sin(angle)*distance}px) scale(2.2)`;
+      const angle = Math.random()*Math.PI*2;
+      const distance = Math.random()*radius + 20;
+      clone.style.transform = `translate(${Math.cos(angle)*distance}px,${Math.sin(angle)*distance}px) scale(2.2)`;
       clone.classList.add("out");
     }, i*120);
 
@@ -211,5 +212,51 @@ function flyWords(el, radius){
   });
 }
 
-// Fit image to screen
-function fitImage
+// Fit image inside screen
+function fitImage(img){
+  const screenRect = img.parentElement.getBoundingClientRect();
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const screenRatio = screenRect.width / screenRect.height;
+
+  if(imgRatio > screenRatio){
+    img.style.width='100%';
+    img.style.height='auto';
+  } else {
+    img.style.width='auto';
+    img.style.height='100%';
+  }
+}
+
+// Show next image with quiz and word-fly
+function showNextImage(){
+  image.src = images[current];
+  rationale.classList.remove("show","up");
+  quizText.classList.remove("show");
+  quizText.innerHTML = quizText.dataset.text;
+
+  image.onload = () => {
+    fitImage(image);
+    setTimeout(()=>rationale.classList.add("show"),100);
+    setTimeout(()=>{
+      rationale.classList.add("up");
+      quizText.classList.add("show");
+      splitWords(quizText);
+      flyWords(quizText, 80);
+    }, 800);
+
+    setTimeout(()=>{
+      rationale.classList.remove("up");
+      quizText.classList.remove("show");
+    }, displayDuration - 1200);
+  }
+
+  current = (current + 1) % images.length;
+  setTimeout(showNextImage, displayDuration);
+}
+
+// Start loop
+showNextImage();
+</script>
+
+</body>
+</html>
