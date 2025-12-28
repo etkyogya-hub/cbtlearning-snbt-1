@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Auto Loop Motion with Images</title>
+<title>SNBT Auto Loop Motion with Scalable Images</title>
 
 <style>
 body{
@@ -112,17 +112,20 @@ body{
   inset:0;
   opacity:0;
   transition:opacity .8s ease;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 .rationale img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:12px;
-  transform: scale(0.8);
+  max-width:100%;
+  max-height:100%;
+  object-fit: contain;        /* preserve aspect ratio */
+  transform-origin: center center;
+  transform: scale(0.8);     /* start smaller */
   transition: transform 5s ease-in-out;
 }
 .rationale.show img{
-  transform: scale(1);
+  transform: scale(1);       /* zoom in */
 }
 .fallback{
   position:absolute;
@@ -174,7 +177,7 @@ const hook = document.getElementById("hook");
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 
-const LOOP_DURATION = 9000; // Duration for each image
+const LOOP_DURATION = 9000; 
 const images = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
@@ -199,7 +202,7 @@ function flyWords(el, radius){
     const clone = span.cloneNode(true);
     clone.className="word-fly";
     clone.style.left = r.left - b.left + "px";
-    clone.style.top  = r.top  - b.top  + "px";
+    clone.style.top  = r.top  - b.top + "px";
     screen.appendChild(clone);
 
     setTimeout(()=>{
@@ -221,23 +224,38 @@ function resetState(){
   splitWords(hook);
 }
 
-/* SEQUENTIAL IMAGE LOOP */
+/* FIT IMAGE TO SCREEN WHILE PRESERVING RATIO */
+function fitImage(img){
+  const screenRect = screen.getBoundingClientRect();
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const screenRatio = screenRect.width / screenRect.height;
+
+  if(imgRatio > screenRatio){
+    img.style.width = '100%';
+    img.style.height = 'auto';
+  } else {
+    img.style.width = 'auto';
+    img.style.height = '100%';
+  }
+}
+
+/* SHOW SEQUENTIAL IMAGES WITH ZOOM */
 function showNextImage(){
   resetState();
   current = (current + 1) % images.length;
   image.src = images[current];
 
-  // Wait for image to load before showing + zoom
   image.onload = () => {
+    fitImage(image); // fit to screen preserving aspect ratio
     setTimeout(()=>flyWords(quizText,140),1200);
     setTimeout(()=>flyWords(hook,160),2600);
-    setTimeout(()=>rationale.classList.add("show"),4600);
+    setTimeout(()=>rationale.classList.add("show"),4600); // zoom in
   }
 
   setTimeout(showNextImage, LOOP_DURATION);
 }
 
-// Start loop
+// start the loop
 showNextImage();
 </script>
 
