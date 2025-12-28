@@ -56,18 +56,17 @@ body{
   50%{transform:translateY(20px)}
 }
 
-/* SCREEN - transparent to show image */
+/* SCREEN - transparent */
 .screen{
   position:absolute;
   inset:10px;
   border-radius:26px;
-  background:transparent; /* remove blocking blue */
+  background:transparent;
   overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  position: relative;
 }
 
 /* IMAGE CONTAINER */
@@ -85,13 +84,13 @@ body{
   max-height:100%;
   object-fit:contain;
   transform: scale(0.8);
-  transition: transform 2s ease-in-out;
+  transition: transform 0.8s ease-in-out;
 }
-.rationale.show img{
+.rationale.show{
   transform: scale(1);
 }
 .rationale.up{
-  transform: translateY(-40px);
+  transform: scale(1) translateY(-40px);
 }
 
 /* QUIZ TEXT */
@@ -104,12 +103,19 @@ body{
   text-align:center;
   opacity:0;
   transition: opacity 0.5s ease;
+  z-index:50;
 }
 .quiz-text.show{
   opacity:1;
 }
 
-/* WORD FLY EFFECT */
+/* WORD FLY CONTAINER */
+.word-fly-container{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:99;
+}
 .word-fly{
   position:absolute;
   color:#fff;
@@ -160,7 +166,8 @@ body{
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
     </div>
-    <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah">Jika 3x + 5 = 20, maka nilai x adalah</div>
+    <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
+    <div class="word-fly-container" id="wordFlyContainer"></div>
     <div class="hook-promo">SNBT tanpa bimbingan tapi detail dengan Rationale Generator</div>
     <div class="branding">ETK Yogya</div>
   </div>
@@ -179,6 +186,7 @@ const displayDuration = 5000;
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 const quizText = document.getElementById("quizText");
+const wordFlyContainer = document.getElementById("wordFlyContainer");
 
 // Split quiz text into spans
 function splitWords(el){
@@ -189,16 +197,16 @@ function splitWords(el){
 
 // Fly words function
 function flyWords(el, radius){
-  const parent = el.parentElement;
-  const screenRect = parent.getBoundingClientRect();
+  wordFlyContainer.innerHTML = ""; // clear previous
+  const parentRect = wordFlyContainer.getBoundingClientRect();
 
   el.querySelectorAll("span").forEach((span,i)=>{
     const rect = span.getBoundingClientRect();
     const clone = span.cloneNode(true);
     clone.className="word-fly";
-    clone.style.left = rect.left - screenRect.left + "px";
-    clone.style.top = rect.top - screenRect.top + "px";
-    parent.appendChild(clone);
+    clone.style.left = rect.left - parentRect.left + "px";
+    clone.style.top = rect.top - parentRect.top + "px";
+    wordFlyContainer.appendChild(clone);
 
     setTimeout(()=>{
       const angle = Math.random()*Math.PI*2;
@@ -228,22 +236,23 @@ function fitImage(img){
 // Show next image with quiz and word-fly
 function showNextImage(){
   image.src = images[current];
-  rationale.classList.remove("show","up");
-  quizText.classList.remove("show");
+  rationale.className = "rationale";
+  quizText.className = "quiz-text";
   quizText.innerHTML = quizText.dataset.text;
 
-  image.onload = () => {
+  image.onload = ()=>{
     fitImage(image);
-    setTimeout(()=>rationale.classList.add("show"),100);  // zoom in
-    setTimeout(()=>{
-      rationale.classList.add("up");  // move up
-      quizText.classList.add("show");  // show quiz
-      splitWords(quizText);
-      flyWords(quizText, 80);          // word-fly effect
-    }, 800);
+    setTimeout(()=> rationale.classList.add("show"),100); // zoom in
 
     setTimeout(()=>{
-      rationale.classList.remove("up"); // move down
+      rationale.classList.add("up");     // move up
+      quizText.classList.add("show");    // show quiz
+      splitWords(quizText);
+      flyWords(quizText, 80);            // word-fly effect
+    },900);
+
+    setTimeout(()=>{
+      rationale.classList.remove("up");  // move down
       quizText.classList.remove("show"); // hide quiz
     }, displayDuration - 1200);
   }
