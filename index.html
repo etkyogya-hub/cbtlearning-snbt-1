@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Mockup Image Loop with Cascading Raw Images</title>
+<title>SNBT Mockup Full Animation with Hook</title>
 <style>
 body{
   margin:0;
@@ -176,6 +176,46 @@ body{
   border-radius:4px;
   opacity:0.9;
 }
+
+/* HOOK LINES UNDER BRANDING */
+.hook-container{
+  position:absolute;
+  bottom:25px;
+  width:90%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:100;
+}
+.hook-line{
+  white-space:nowrap;
+  font-weight:700;
+  opacity:0;
+  display:flex;
+  justify-content:center;
+}
+.hook-line.big{
+  font-size:1.2em;
+  color:#38bdf8;
+  margin-bottom:4px;
+  transform: translateY(50px) scale(0.5);
+  transition: transform 1s ease, opacity 1s ease;
+}
+.hook-line.small{
+  font-size:0.9em;
+  color:#fff;
+  transform: translateY(50px) scale(0.5);
+  transition: transform 1s ease, opacity 1s ease;
+}
+@keyframes wave{
+  0%,100%{transform: translateY(0);}
+  50%{transform: translateY(-2px);}
+}
+.wave{
+  animation:wave 2s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -189,6 +229,10 @@ body{
     <div class="cascade-container" id="cascadeContainer"></div>
     <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="wordFlyContainer"></div>
+    <div class="hook-container" id="hookContainer">
+      <div class="hook-line big" id="hookLine1">Persiapan Bedah Soal SNBT tanpa Pembimbing</div>
+      <div class="hook-line small" id="hookLine2">hanya dengan Rationale Generator</div>
+    </div>
     <div class="hook-promo">SNBT tanpa bimbingan tapi detail dengan Rationale Generator</div>
     <div class="branding">ETK Yogya</div>
   </div>
@@ -201,7 +245,7 @@ const rationaleImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
 ];
 
-// NEW CASCADE IMAGES
+// CASCADE IMAGES
 const cascadeImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
@@ -276,7 +320,29 @@ function showCascade(){
   });
 }
 
-// Show next rationale image and trigger cascade
+// Fly hook text
+function flyHookText(lineId, delay=0){
+  const line = document.getElementById(lineId);
+  const text = line.innerText;
+  line.innerHTML = "";
+  const words = text.split(" ");
+  words.forEach((word,i)=>{
+    const span = document.createElement("span");
+    span.innerText = word + " ";
+    span.style.display="inline-block";
+    span.style.opacity=0;
+    span.style.transform="translateX(-50px) scale(0.5)";
+    span.style.transition="transform 0.8s ease, opacity 0.8s ease";
+    line.appendChild(span);
+    setTimeout(()=>{
+      span.style.opacity=1;
+      span.style.transform="translateX(0) scale(1)";
+    }, delay + i*150);
+  });
+  setTimeout(()=>line.classList.add("wave"), delay + words.length*150 + 500);
+}
+
+// Show next rationale image and trigger cascade & hook
 function showNextRationale(){
   image.src = rationaleImages[currentRationale];
   rationale.className = "rationale";
@@ -286,23 +352,24 @@ function showNextRationale(){
   image.onload = ()=>{
     fitImage(image);
     setTimeout(()=> rationale.classList.add("show"),100);
-
     setTimeout(()=>{
       rationale.classList.add("up");
       quizText.classList.add("show");
       splitWords(quizText);
       flyWords(quizText, 80);
     },900);
-
     setTimeout(()=>{
       rationale.classList.remove("up");
       quizText.classList.remove("show");
-      showCascade(); // trigger new cascade after rationale moves up
+      showCascade(); // cascade images
+      // trigger hook flying in
+      flyHookText("hookLine1", 200);
+      flyHookText("hookLine2", 1200);
     }, displayDuration - 1200);
   }
 
   currentRationale = (currentRationale + 1) % rationaleImages.length;
-  setTimeout(showNextRationale, displayDuration + 1000);
+  setTimeout(showNextRationale, displayDuration + 1500);
 }
 
 // Start loop
