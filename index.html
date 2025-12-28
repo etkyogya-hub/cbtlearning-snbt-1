@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Auto Loop Motion - Lokal Ready</title>
+<title>SNBT Auto Loop Motion</title>
 
 <style>
 body{
@@ -17,7 +17,7 @@ body{
   overflow:hidden;
 }
 
-/* MOCKUP 3D PHONE */
+/* MOCKUP 3D */
 .phone{
   width:230px;
   height:460px;
@@ -57,7 +57,6 @@ body{
   50%{transform:translateY(20px)}
 }
 
-/* SCREEN */
 .screen{
   position:absolute;
   inset:10px;
@@ -97,94 +96,28 @@ body{
   font-size:16px;
   font-weight:900;
   color:#fff;
-  animation:hookPulse 1.6s ease-in-out infinite;
+  animation:hookWave 3s ease-in-out infinite;
 }
-@keyframes hookPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
+@keyframes hookWave{
+  0%{transform:translateY(0)}
+  25%{transform:translateY(-4px)}
+  50%{transform:translateY(0)}
+  75%{transform:translateY(4px)}
+  100%{transform:translateY(0)}
 }
 
-/* VIDEO RATIONALE */
+/* VIDEO */
 .rationale{
   position:absolute;
   inset:0;
   opacity:0;
-  transition:opacity .8s ease, transform .8s ease;
-  transform:scale(1.08);
+  transition:opacity .8s ease;
 }
-.rationale.show{
-  opacity:1;
-  transform:scale(1);
-}
+.rationale.show{opacity:1}
 .rationale video{
   width:100%;
   height:100%;
   object-fit:cover;
-}
-
-/* SUBTITLE */
-.subtitle{
-  position:absolute;
-  bottom:22px;
-  left:50%;
-  transform:translateX(-50%);
-  max-width:85%;
-  text-align:center;
-  font-size:14px;
-  font-weight:900;
-  line-height:1.35;
-  color:#fff;
-  pointer-events:none;
-  z-index:120;
-  text-shadow:0 2px 8px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9);
-}
-.subtitle span{
-  display:inline-block;
-  opacity:0;
-  transform:translateY(8px) scale(.96);
-  animation:subPop .4s cubic-bezier(.22,.9,.22,1) forwards;
-  color:#fff;
-}
-.subtitle span.keyword{
-  color:#38bdf8;
-  text-shadow:0 4px 12px rgba(0,0,0,.85);
-  transform:translateY(12px) scale(1.1);
-  animation:subPopKeyword .5s cubic-bezier(.22,.9,.22,1) forwards;
-}
-@keyframes subPop{to{opacity:1;transform:none;}}
-@keyframes subPopKeyword{to{opacity:1;transform:none;}}
-
-/* CTA */
-.cta{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-  background:rgba(2,6,23,.55);
-  backdrop-filter:blur(4px);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .6s ease;
-  z-index:150;
-}
-.cta.show{opacity:1;}
-.cta-main{
-  font-size:18px;
-  font-weight:900;
-  color:#fff;
-  animation:ctaPulse 1.4s ease-in-out infinite;
-}
-.cta-sub{
-  font-size:13px;
-  font-weight:700;
-  color:#c7d2fe;
-}
-@keyframes ctaPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.06)}
 }
 </style>
 </head>
@@ -196,26 +129,25 @@ body{
   <div class="screen" id="screen">
 
     <div class="quiz" id="quiz">
-      <p id="quizText">Jika 3x + 5 = 20, maka nilai x adalah</p>
+      <p id="quizText">
+        Jika 3x + 5 = 20, maka nilai x adalah
+      </p>
       <ul>
         <li>A. 3</li>
         <li>B. 4</li>
         <li>C. 5</li>
         <li>D. 6</li>
       </ul>
-      <div class="hook" id="hook">SNBT bisa ditaklukkan TANPA bimbel</div>
+
+      <div class="hook" id="hook">
+        SNBT bisa dibedah tanpa bimbel
+      </div>
     </div>
 
     <div class="rationale" id="rationale">
-      <video id="video" muted autoplay loop playsinline preload="auto">
-        <source src="videos/demo-snbt.mp4" type="video/mp4">
+      <video muted playsinline preload="auto" id="video">
+        <source src="https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/demo-snbt.mp4" type="video/mp4">
       </video>
-    </div>
-
-    <div class="subtitle" id="subtitle"></div>
-    <div class="cta" id="cta">
-      <div class="cta-main">Follow untuk SNBT Logic</div>
-      <div class="cta-sub">Save biar gak lupa caranya</div>
     </div>
 
   </div>
@@ -228,17 +160,8 @@ const quizText = document.getElementById("quizText");
 const hook = document.getElementById("hook");
 const rationale = document.getElementById("rationale");
 const video = document.getElementById("video");
-const subtitle = document.getElementById("subtitle");
-const cta = document.getElementById("cta");
 
-const LOOP_DURATION = 8800;
-
-const subtitleLines = [
-  "Ini bukan tebak-tebakan SNBT",
-  "Ini cara berpikir soal SNBT",
-  "Lihat pola soalnya",
-  "Jawaban bisa diprediksi SNBT"
-];
+const LOOP_DURATION = 9000;
 
 /* SPLIT WORDS */
 function splitWords(el){
@@ -254,91 +177,52 @@ function flyWords(el, radius){
   el.querySelectorAll("span").forEach((span,i)=>{
     const r = span.getBoundingClientRect();
     const b = screen.getBoundingClientRect();
+
     const clone = span.cloneNode(true);
     clone.className="word-fly";
     clone.style.left = r.left - b.left + "px";
     clone.style.top  = r.top  - b.top  + "px";
     screen.appendChild(clone);
+
     setTimeout(()=>{
       const a=Math.random()*Math.PI*2;
       const d=Math.random()*radius+40;
-      clone.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(2.2)`;
+      clone.style.transform=
+        `translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(2.2)`;
       clone.classList.add("out");
     },i*120);
+
     setTimeout(()=>clone.remove(),1800);
   });
 }
 
-/* SUBTITLE - HIGHLIGHT KEYWORD SNBT */
-function showSubtitle(text, startDelay=0, beat=800){
-  setTimeout(()=>{
-    subtitle.innerHTML = "";
-    text.split(" ").forEach((word,i)=>{
-      const span = document.createElement("span");
-      span.textContent = word + " ";
-      span.style.animationDelay = (i*beat/1000)+"s";
-      span.style.animationDuration = ".4s";
-      if(word.toUpperCase().includes("SNBT")){
-        span.classList.add("keyword");
-      }
-      subtitle.appendChild(span);
-    });
-  }, startDelay);
-}
-
-function clearSubtitle(){ subtitle.innerHTML = ""; }
-
 /* RESET */
 function resetState(){
   rationale.classList.remove("show");
-  cta.classList.remove("show");
-  clearSubtitle();
-  if(video){
-    video.pause();
-    video.currentTime = 0;
-  }
+  video.pause();
+  video.currentTime = 0;
   splitWords(quizText);
   splitWords(hook);
 }
 
-/* MAIN LOOP */
+/* SEQUENCE */
 function run(){
   resetState();
 
-  setTimeout(()=>flyWords(quizText,150),900);
-  setTimeout(()=>flyWords(hook,180),2200);
+  setTimeout(()=>flyWords(quizText,140),1200);
+  setTimeout(()=>flyWords(hook,160),2600);
 
   setTimeout(()=>{
     rationale.classList.add("show");
-    video.play().catch(()=>{});
+    video.play();
+  },4600);
 
-    showSubtitle(subtitleLines[0],0,700);
-    showSubtitle(subtitleLines[1],1200,800);
-    showSubtitle(subtitleLines[2],2600,750);
-    showSubtitle(subtitleLines[3],3500,700);
-
-  },3800);
-
-  setTimeout(()=>{
-    video.pause();
-    cta.classList.add("show");
-  },7200);
+  setTimeout(()=>video.pause(),7200);
 
   setTimeout(run, LOOP_DURATION);
 }
 
-/* START LOOP WHEN VIDEO READY */
-video.addEventListener("canplay", ()=>{
-  run();
-});
-
-/* DEBUG */
-video.addEventListener("error", e=>{
-  console.log("VIDEO ERROR:", e);
-});
-video.addEventListener("loadeddata", ()=>{
-  console.log("VIDEO READY TO PLAY");
-});
+run();
 </script>
 
 </body>
