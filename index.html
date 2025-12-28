@@ -1,217 +1,207 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SNBT Thinking System</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>SNBT CBT Simulator</title>
 
 <style>
-/* ===== BASE ===== */
+/* ===== RESET ===== */
+*{box-sizing:border-box}
 body{
   margin:0;
   background:#020617;
   color:#e5e7eb;
-  font-family:system-ui;
-  overflow:hidden;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  overflow:auto;
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
-.scene{
-  position:absolute;
-  inset:0;
-  display:none;
+
+/* ===== TYPO SAFE ===== */
+:root{
+  --hero:clamp(9rem,15vw,18rem);
+  --xl:clamp(4.5rem,7vw,8rem);
+  --md:clamp(1.6rem,3vw,2.6rem);
+}
+
+/* ===== STAGE ===== */
+#stage{
+  width:100%;
+  height:100vh;
+  display:flex;
   justify-content:center;
   align-items:center;
+  transform-origin:center;
 }
-.scene.active{display:flex}
 
-/* ===== TYPO SCALE ===== */
-:root{
-  --hero: clamp(14rem, 18vw, 22rem);
-  --xl: clamp(6rem, 8vw, 9rem);
-  --md: clamp(2rem, 3.5vw, 3rem);
-  --sm: clamp(1rem, 1.2vw, 1.2rem);
+/* ===== SCENES ===== */
+.scene{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease;
 }
-.hero{font-size:var(--hero);font-weight:900;line-height:1}
+.scene.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.big{font-size:var(--hero);font-weight:900;line-height:.9}
 .xl{font-size:var(--xl);font-weight:800}
-.md{font-size:var(--md)}
-.sm{font-size:var(--sm)}
+.sm{font-size:var(--md);opacity:.8}
+.stack{font-size:var(--md);letter-spacing:.08em}
 
-/* ===== MOTION ===== */
-.punch{animation:punch .9s cubic-bezier(.2,.9,.3,1) forwards}
-@keyframes punch{
-  0%{transform:scale(.6);opacity:0}
-  70%{transform:scale(1.05)}
-  100%{transform:scale(1);opacity:1}
-}
-.delay1{animation-delay:.15s}
-.delay2{animation-delay:.3s}
-
-/* ===== ARC TEXT ===== */
-.arc{
-  position:absolute;
-  top:6%;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-}
-.arc span{
-  position:absolute;
-  left:50%;
-  transform-origin:0 130px;
-  font-size:var(--sm);
-}
-
-/* ===== PHONE ===== */
-.phone{
-  position:absolute;
-  right:8%;
-  bottom:10%;
-  width:150px;
-  height:280px;
-  border:2px solid #64748b;
-  border-radius:20px;
-  overflow:hidden;
-}
-.screen{
-  background:#0f172a;
-  animation:scroll 5s linear infinite;
-}
-.item{
-  padding:12px;
-  border-bottom:1px solid #1e293b;
-  font-size:12px;
-}
-@keyframes scroll{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-40%)}
-  100%{transform:translateY(0)}
+.circle{
+  border:1px solid #e5e7eb;
+  border-radius:999px;
+  padding:8px 18px;
+  margin-bottom:20px;
+  font-size:14px;
 }
 
 /* ===== PROGRESS ===== */
 #progress{
   position:fixed;
-  top:12px;
+  top:14px;
   left:50%;
   transform:translateX(-50%);
   display:flex;
   gap:6px;
-  z-index:10;
+  width:92%;
+  max-width:420px;
 }
 #progress span{
-  width:36px;
+  flex:1;
   height:3px;
   background:#1e293b;
-  border-radius:3px;
   overflow:hidden;
 }
-#progress span::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:#e5e7eb;
-  transform:translateX(-100%);
-}
 #progress span.active::after{
+  content:'';
+  display:block;
+  height:100%;
+  background:#e5e7eb;
   animation:fill linear forwards;
 }
-@keyframes fill{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(0)}
+@keyframes fill{from{width:0}to{width:100%}}
+
+/* ===== CTA ===== */
+.cta{
+  position:absolute;
+  bottom:12%;
+  padding:14px 22px;
+  border-radius:14px;
+  background:#e5e7eb;
+  color:#020617;
+  font-weight:700;
+  text-decoration:none;
+  font-size:15px;
+  opacity:0;
+  transform:translateY(18px);
+  animation:ctaIn .8s ease forwards;
+  animation-delay:.6s;
 }
+@keyframes ctaIn{to{opacity:1;transform:none}}
 </style>
 </head>
 
 <body>
 
-<!-- PROGRESS -->
 <div id="progress">
   <span></span><span></span><span></span>
   <span></span><span></span><span></span><span></span>
 </div>
 
+<div id="stage">
+
 <!-- SCENE 1 -->
 <div class="scene active">
-  <div class="hero punch">SNBT</div>
+  <div class="big">SNBT</div>
 </div>
 
 <!-- SCENE 2 -->
 <div class="scene">
-  <div class="hero punch">BUKAN</div>
-  <div class="md punch delay2">HAFALAN</div>
+  <div class="big">BUKAN</div>
+  <div class="stack">HAFALAN</div>
 </div>
 
 <!-- SCENE 3 -->
 <div class="scene">
-  <div class="arc">
-    <span style="transform:rotate(-60deg)">P</span>
-    <span style="transform:rotate(-40deg)">O</span>
-    <span style="transform:rotate(-20deg)">L</span>
-    <span style="transform:rotate(0deg)">A</span>
-    <span style="transform:rotate(20deg)">•</span>
-    <span style="transform:rotate(40deg)">B</span>
-    <span style="transform:rotate(60deg)">E</span>
-    <span style="transform:rotate(80deg)">R</span>
-    <span style="transform:rotate(100deg)">P</span>
-    <span style="transform:rotate(120deg)">I</span>
-    <span style="transform:rotate(140deg)">K</span>
-    <span style="transform:rotate(160deg)">I</span>
-    <span style="transform:rotate(180deg)">R</span>
-  </div>
-  <div class="xl punch">UJIAN</div>
+  <div class="xl">POLA</div>
+  <div class="stack">BERPIKIR</div>
 </div>
 
 <!-- SCENE 4 -->
 <div class="scene">
-  <div class="hero punch">CBT</div>
-  <div class="phone">
-    <div class="screen">
-      <div class="item">Soal</div>
-      <div class="item">Pilihan</div>
-      <div class="item">Rationale</div>
-      <div class="item">Pembahasan</div>
-      <div class="item">Pola</div>
-    </div>
-  </div>
+  <div class="circle">CBT • MOBILE</div>
+  <div class="xl">SIMULASI</div>
 </div>
 
 <!-- SCENE 5 -->
 <div class="scene">
-  <div class="hero punch">MANDIRI</div>
-  <div class="md punch delay2">TAPI TERARAH</div>
+  <div class="xl">MANDIRI</div>
 </div>
 
 <!-- SCENE 6 -->
 <div class="scene">
-  <div class="hero punch">TIDAK</div>
-  <div class="md punch delay2">JANJI INSTAN</div>
+  <div class="circle">UNTUK ORANG TUA</div>
+  <div class="big">TIDAK</div>
+  <div class="stack">JANJI INSTAN</div>
 </div>
 
-<!-- SCENE 7 -->
+<!-- SCENE 7 CTA -->
 <div class="scene">
-  <div class="xl punch">SYSTEM</div>
-  <div class="sm punch delay2">BUILT BY G. ASFARRASYID</div>
+  <div class="xl">SYSTEM</div>
+  <div class="sm">BUILT BY G. ASFARRASYID</div>
+  <a class="cta" href="quiz/index.html">Mulai Simulasi CBT →</a>
+</div>
+
 </div>
 
 <script>
-const scenes = document.querySelectorAll('.scene');
-const bars = document.querySelectorAll('#progress span');
-let index = 0;
-const delay = 3000;
+/* ===== AUTO SCALE BY ASPECT RATIO ===== */
+function autoScale(){
+  const baseW = 390;
+  const baseH = 844;
+  const scale = Math.min(
+    window.innerWidth / baseW,
+    window.innerHeight / baseH
+  );
+  document.getElementById('stage')
+    .style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize',autoScale);
+autoScale();
 
-/* ===== TRACKING STATE ===== */
-let sceneStart = Date.now();
-let stats = JSON.parse(localStorage.getItem('snbtTrack')) || {
-  scenes: Array(scenes.length).fill(0),
-  lastScene: 0,
-  reachedCTA: false,
-  ctaClicked: false
+/* ===== SCENE ENGINE + TRACKING ===== */
+const scenes=document.querySelectorAll('.scene');
+const bars=document.querySelectorAll('#progress span');
+let index=0,delay=3000;
+
+let stats=JSON.parse(localStorage.getItem('snbtTrack'))||{
+  scenes:Array(scenes.length).fill(0),
+  reachedCTA:false,
+  ctaClicked:false
 };
+let start=Date.now();
 
-/* ===== SCENE SHOW ===== */
 function show(n){
-  const now = Date.now();
-  stats.scenes[index] += now - sceneStart;
-  stats.lastScene = n;
-  sceneStart = now;
+  let now=Date.now();
+  stats.scenes[index]+=now-start;
+  start=now;
 
   scenes.forEach(s=>s.classList.remove('active'));
   bars.forEach(b=>{
@@ -222,46 +212,30 @@ function show(n){
 
   scenes[n].classList.add('active');
   bars[n].classList.add('active');
-  bars[n].style.animationDuration = delay + 'ms';
+  bars[n].style.animationDuration=delay+'ms';
 
-  if(n === scenes.length - 1){
-    stats.reachedCTA = true;
-  }
-
-  localStorage.setItem('snbtTrack', JSON.stringify(stats));
+  if(n===scenes.length-1) stats.reachedCTA=true;
+  localStorage.setItem('snbtTrack',JSON.stringify(stats));
 }
 
-/* ===== INIT ===== */
-show(0);
-
-/* ===== AUTO LOOP ===== */
-let timer = setInterval(()=>{
+let timer=setInterval(()=>{
   index++;
-  if(index >= scenes.length){
-    clearInterval(timer);
-    return;
-  }
+  if(index>=scenes.length){clearInterval(timer);return;}
   show(index);
-}, delay);
+},delay);
 
-/* ===== TAP ===== */
 document.body.addEventListener('click',()=>{
   clearInterval(timer);
   index++;
-  if(index >= scenes.length) return;
+  if(index>=scenes.length)return;
   show(index);
 });
 
-/* ===== CTA CLICK ===== */
-const cta = document.querySelector('.cta');
-if(cta){
-  cta.addEventListener('click',()=>{
-    stats.ctaClicked = true;
-    localStorage.setItem('snbtTrack', JSON.stringify(stats));
-  });
-}
+document.querySelector('.cta')?.addEventListener('click',()=>{
+  stats.ctaClicked=true;
+  localStorage.setItem('snbtTrack',JSON.stringify(stats));
+});
 </script>
-
 
 </body>
 </html>
