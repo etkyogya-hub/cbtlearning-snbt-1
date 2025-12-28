@@ -121,6 +121,7 @@ body{
 .rationale.show{
   opacity:1;
   transform: scale(1) translateY(0);
+  animation:floatRationale 4s ease-in-out infinite alternate;
 }
 .rationale img{
   width:100%;
@@ -182,6 +183,18 @@ body{
   z-index:60;
 }
 .word-fly.out{opacity:0;}
+
+/* Floating animations */
+@keyframes floatCascade{
+  0%{transform: translateY(0) scale(1);}
+  50%{transform: translateY(-10px) scale(1);}
+  100%{transform: translateY(0) scale(1);}
+}
+@keyframes floatRationale{
+  0%{transform: translateY(0) scale(1);}
+  50%{transform: translateY(-8px) scale(1);}
+  100%{transform: translateY(0) scale(1);}
+}
 </style>
 </head>
 <body>
@@ -201,7 +214,7 @@ body{
     </div>
 
     <div class="cascade-container" id="cascadeContainer"></div>
-    <div class="quiz-text" id="quizText" data-text="SNBT|PEMBAHASAN|Jika 3x + 5 = 20, maka nilai x adalah"></div>
+    <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="wordFlyContainer"></div>
   </div>
 </div>
@@ -273,12 +286,13 @@ function showCascade(){
     setTimeout(()=>{
       img.style.opacity=1;
       img.style.transform=`scale(1) translateY(${i*15}px)`;
+      img.style.animation = `floatCascade 4s ease-in-out infinite alternate ${i*0.2}s`;
     },i*400);
     setTimeout(()=>img.remove(), displayDuration);
   });
 }
 
-// Hook animation (stays horizontal)
+// Hook animation
 function flyHookText(lineId, delay=0){
   const line=document.getElementById(lineId);
   const text=line.innerText;
