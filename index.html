@@ -192,40 +192,76 @@ body{
 </div>
 
 <script>
-const scenes=document.querySelectorAll('.scene');
-const bars=document.querySelectorAll('#progress span');
-let index=0;
-const delay=3000;
+const scenes = document.querySelectorAll('.scene');
+const bars = document.querySelectorAll('#progress span');
+let index = 0;
+const delay = 3000;
 
+/* ===== TRACKING STATE ===== */
+let sceneStart = Date.now();
+let stats = JSON.parse(localStorage.getItem('snbtTrack')) || {
+  scenes: Array(scenes.length).fill(0),
+  lastScene: 0,
+  reachedCTA: false,
+  ctaClicked: false
+};
+
+/* ===== SCENE SHOW ===== */
 function show(n){
+  const now = Date.now();
+  stats.scenes[index] += now - sceneStart;
+  stats.lastScene = n;
+  sceneStart = now;
+
   scenes.forEach(s=>s.classList.remove('active'));
   bars.forEach(b=>{
     b.classList.remove('active');
     b.style.animation='none';
     b.offsetHeight;
   });
+
   scenes[n].classList.add('active');
   bars[n].classList.add('active');
-  bars[n].style.animationDuration=delay+'ms';
+  bars[n].style.animationDuration = delay + 'ms';
+
+  if(n === scenes.length - 1){
+    stats.reachedCTA = true;
+  }
+
+  localStorage.setItem('snbtTrack', JSON.stringify(stats));
 }
 
+/* ===== INIT ===== */
 show(0);
 
-let timer=setInterval(()=>{
-  index=(index+1)%scenes.length;
+/* ===== AUTO LOOP ===== */
+let timer = setInterval(()=>{
+  index++;
+  if(index >= scenes.length){
+    clearInterval(timer);
+    return;
+  }
   show(index);
-},delay);
+}, delay);
 
+/* ===== TAP ===== */
 document.body.addEventListener('click',()=>{
   clearInterval(timer);
-  index=(index+1)%scenes.length;
+  index++;
+  if(index >= scenes.length) return;
   show(index);
-  timer=setInterval(()=>{
-    index=(index+1)%scenes.length;
-    show(index);
-  },delay);
 });
+
+/* ===== CTA CLICK ===== */
+const cta = document.querySelector('.cta');
+if(cta){
+  cta.addEventListener('click',()=>{
+    stats.ctaClicked = true;
+    localStorage.setItem('snbtTrack', JSON.stringify(stats));
+  });
+}
 </script>
+
 
 </body>
 </html>
