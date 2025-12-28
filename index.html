@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Image Loop Mockup</title>
+<title>SNBT Image Loop Mockup with Branding</title>
 <style>
 body{
   margin:0;
@@ -66,6 +66,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
+  flex-direction:column;
 }
 
 /* IMAGE CONTAINER */
@@ -80,12 +81,58 @@ body{
 .rationale img{
   max-width:100%;
   max-height:100%;
-  object-fit:contain;   /* no cropping */
+  object-fit:contain;
   transform: scale(0.8);
   transition: transform 2s ease-in-out;
 }
 .rationale.show img{
-  transform: scale(1);  /* zoom in */
+  transform: scale(1);
+}
+
+/* QUIZ TEXT */
+.quiz-text{
+  position:absolute;
+  bottom:20px;
+  width:90%;
+  color:#fff;
+  font-weight:700;
+  text-align:center;
+  opacity:0;
+  transition: opacity 0.8s ease;
+}
+.quiz-text.show{
+  opacity:1;
+}
+
+/* HOOK PROMOTION (TikTok) */
+.hook-promo{
+  position:absolute;
+  bottom:5px;
+  font-size:10px;
+  color:#38bdf8;
+  font-weight:700;
+  opacity:0.8;
+  right:10px;
+  text-align:right;
+  animation:hookWave 3s ease-in-out infinite;
+}
+@keyframes hookWave{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-2px)}
+}
+
+/* PERSONAL BRANDING */
+.branding{
+  position:absolute;
+  top:5px;
+  right:5px;
+  font-size:10px;
+  color:#fff;
+  font-weight:700;
+  background:rgba(0,0,0,0.3);
+  padding:2px 4px;
+  border-radius:4px;
+  opacity:0.9;
 }
 </style>
 </head>
@@ -97,6 +144,9 @@ body{
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
     </div>
+    <div class="quiz-text" id="quizText">Jika 3x + 5 = 20, maka nilai x adalah</div>
+    <div class="hook-promo">Follow me on TikTok @YourHandle</div>
+    <div class="branding">ETK Yogya</div>
   </div>
 </div>
 
@@ -112,6 +162,7 @@ const displayDuration = 5000; // 5 seconds
 
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
+const quizText = document.getElementById("quizText");
 
 // Fit image inside screen without cropping
 function fitImage(img){
@@ -128,21 +179,23 @@ function fitImage(img){
   }
 }
 
-// Show next image with zoom animation
+// Show next image with zoom and quiz text
 function showNextImage(){
   image.src = images[current];
   rationale.classList.remove("show");
-  
+  quizText.classList.remove("show");
+
   image.onload = () => {
     fitImage(image);
-    setTimeout(()=>rationale.classList.add("show"), 100); // small delay for smooth transition
+    setTimeout(()=>rationale.classList.add("show"), 100); 
+    setTimeout(()=>quizText.classList.add("show"), 800);
   }
 
   current = (current + 1) % images.length;
   setTimeout(showNextImage, displayDuration);
 }
 
-// Start the loop
+// Start loop
 showNextImage();
 </script>
 
