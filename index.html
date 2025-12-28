@@ -2,131 +2,133 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Mockup Full Animation with Hook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SNBT Mockup App-Like Presentation</title>
 <style>
-body{
-  margin:0;
-  height:100vh;
-  background:#020617;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-family:system-ui;
-  overflow:hidden;
+body {
+  margin: 0;
+  height: 100vh;
+  background: #020617;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui;
+  overflow: hidden;
 }
 
-/* MOCKUP 3D PHONE */
-.phone{
-  width:230px;
-  height:460px;
-  position:relative;
-  transform-style:preserve-3d;
-  animation:floatPhone 6s ease-in-out infinite;
-}
-@keyframes floatPhone{
-  0%,100%{transform:translateY(0) rotateX(4deg) rotateY(-4deg)}
-  50%{transform:translateY(-8px) rotateX(6deg) rotateY(-6deg)}
-}
-.body{
-  position:absolute;
-  inset:0;
-  border-radius:34px;
-  background:#020617;
-  box-shadow:
-    0 50px 100px rgba(0,0,0,.75),
-    inset 0 0 0 2px #334155;
-}
-.body::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:36px;
-  background:linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(56,189,248,.7) 50%,
-    transparent 100%
-  );
-  opacity:.6;
-  animation:rimMove 4s ease-in-out infinite;
-}
-@keyframes rimMove{
-  0%,100%{transform:translateY(-20px)}
-  50%{transform:translateY(20px)}
+/* MOCKUP PHONE WITHOUT RIM */
+.phone {
+  width: 230px;
+  height: 460px;
+  border-radius: 34px;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
 }
 
 /* SCREEN */
-.screen{
-  position:absolute;
-  inset:10px;
-  border-radius:26px;
-  background:transparent;
-  overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
+.screen {
+  position: absolute;
+  inset: 10px;
+  border-radius: 26px;
+  background: #020617;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 /* RATIONALE IMAGE */
-.rationale{
-  position:absolute;
+.rationale {
+  position: absolute;
   inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  transition: transform 0.8s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  opacity:0;
+  transform: scale(0.5) translateY(20px);
+  transition: all 0.6s ease;
 }
-.rationale img{
+.rationale.show {
+  opacity:1;
+  transform: scale(1) translateY(0);
+}
+.rationale img {
   max-width:100%;
   max-height:100%;
   object-fit:contain;
-  transform: scale(0.8);
-  transition: transform 0.8s ease-in-out;
-}
-.rationale.show{
-  transform: scale(1);
-}
-.rationale.up{
-  transform: scale(1) translateY(-40px);
 }
 
-/* CASCADING RAW IMAGES */
-.cascade-container{
-  position:absolute;
+/* CASCADING IMAGES */
+.cascade-container {
+  position: absolute;
   inset:0;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
   pointer-events:none;
 }
-.cascade-container img{
+.cascade-container img {
+  position:absolute;
   max-width:100%;
   max-height:100%;
   object-fit:contain;
-  position:absolute;
   opacity:0;
-  transform: scale(0.5);
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform: scale(0.5) translateY(20px);
+  transition: all 0.6s ease;
 }
 
 /* QUIZ TEXT */
-.quiz-text{
+.quiz-text {
   position:absolute;
-  bottom:20px;
+  bottom:10px;
   width:90%;
   color:#fff;
   font-weight:700;
   text-align:center;
   opacity:0;
-  transition: opacity 0.5s ease;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
   z-index:50;
 }
-.quiz-text.show{
+.quiz-text.show {
   opacity:1;
+  transform: translateY(0);
+}
+
+/* HOOK TEXT */
+.hook-container {
+  position:absolute;
+  bottom:40px;
+  width:90%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:100;
+}
+.hook-line {
+  white-space: nowrap;
+  font-weight: 700;
+  opacity:0;
+  display:flex;
+  justify-content:center;
+  transform: translateY(20px) scale(0.5);
+  transition: all 0.6s ease;
+}
+.hook-line.big {
+  font-size: 1.2em;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+.hook-line.small {
+  font-size: 0.9em;
+  color: #fff;
 }
 
 /* WORD FLY */
@@ -146,24 +148,7 @@ body{
 }
 .word-fly.out{opacity:0}
 
-/* HOOK PROMO */
-.hook-promo{
-  position:absolute;
-  bottom:5px;
-  font-size:10px;
-  color:#38bdf8;
-  font-weight:700;
-  opacity:0.8;
-  right:10px;
-  text-align:right;
-  animation:hookWave 3s ease-in-out infinite;
-}
-@keyframes hookWave{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-2px)}
-}
-
-/* PERSONAL BRANDING */
+/* BRANDING */
 .branding{
   position:absolute;
   top:5px;
@@ -176,76 +161,30 @@ body{
   border-radius:4px;
   opacity:0.9;
 }
-
-/* HOOK LINES UNDER BRANDING */
-.hook-container{
-  position:absolute;
-  bottom:25px;
-  width:90%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:100;
-}
-.hook-line{
-  white-space:nowrap;
-  font-weight:700;
-  opacity:0;
-  display:flex;
-  justify-content:center;
-}
-.hook-line.big{
-  font-size:1.2em;
-  color:#38bdf8;
-  margin-bottom:4px;
-  transform: translateY(50px) scale(0.5);
-  transition: transform 1s ease, opacity 1s ease;
-}
-.hook-line.small{
-  font-size:0.9em;
-  color:#fff;
-  transform: translateY(50px) scale(0.5);
-  transition: transform 1s ease, opacity 1s ease;
-}
-@keyframes wave{
-  0%,100%{transform: translateY(0);}
-  50%{transform: translateY(-2px);}
-}
-.wave{
-  animation:wave 2s ease-in-out infinite;
-}
 </style>
 </head>
 <body>
 
 <div class="phone">
-  <div class="body"></div>
   <div class="screen">
-    <div class="rationale" id="rationale">
-      <img id="image" src="" alt="Quiz Image">
-    </div>
+    <div class="rationale" id="rationale"><img id="image" src="" alt="Quiz Image"></div>
     <div class="cascade-container" id="cascadeContainer"></div>
     <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="wordFlyContainer"></div>
-    <div class="hook-container" id="hookContainer">
+    <div class="hook-container">
       <div class="hook-line big" id="hookLine1">Persiapan Bedah Soal SNBT tanpa Pembimbing</div>
       <div class="hook-line small" id="hookLine2">hanya dengan Rationale Generator</div>
     </div>
-    <div class="hook-promo">SNBT tanpa bimbingan tapi detail dengan Rationale Generator</div>
     <div class="branding">ETK Yogya</div>
   </div>
 </div>
 
 <script>
-// EXISTING RATIONALE IMAGES
+// Images
 const rationaleImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
 ];
-
-// CASCADE IMAGES
 const cascadeImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
@@ -262,34 +201,8 @@ const image = document.getElementById("image");
 const quizText = document.getElementById("quizText");
 const wordFlyContainer = document.getElementById("wordFlyContainer");
 const cascadeContainer = document.getElementById("cascadeContainer");
-
-// Split quiz text
-function splitWords(el){
-  const text = el.dataset.text || el.innerText;
-  el.dataset.text = text;
-  el.innerHTML = text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
-}
-
-// Fly words function
-function flyWords(el, radius){
-  wordFlyContainer.innerHTML = "";
-  const parentRect = wordFlyContainer.getBoundingClientRect();
-  el.querySelectorAll("span").forEach((span,i)=>{
-    const rect = span.getBoundingClientRect();
-    const clone = span.cloneNode(true);
-    clone.className="word-fly";
-    clone.style.left = rect.left - parentRect.left + "px";
-    clone.style.top = rect.top - parentRect.top + "px";
-    wordFlyContainer.appendChild(clone);
-    setTimeout(()=>{
-      const angle = Math.random()*Math.PI*2;
-      const distance = Math.random()*radius + 20;
-      clone.style.transform = `translate(${Math.cos(angle)*distance}px,${Math.sin(angle)*distance}px) scale(2.2)`;
-      clone.classList.add("out");
-    }, i*120);
-    setTimeout(()=>clone.remove(),1800);
-  });
-}
+const hookLine1 = document.getElementById("hookLine1");
+const hookLine2 = document.getElementById("hookLine2");
 
 // Fit image inside screen
 function fitImage(img){
@@ -305,71 +218,50 @@ function fitImage(img){
   }
 }
 
-// Show cascading images
-function showCascade(){
-  cascadeContainer.innerHTML = "";
-  cascadeImages.forEach((src,i)=>{
-    const img = document.createElement("img");
-    img.src = src;
-    cascadeContainer.appendChild(img);
-    setTimeout(()=>{
-      img.style.opacity=1;
-      img.style.transform="scale(1)";
-    }, i*400); // staggered cascade
-    setTimeout(()=>img.remove(), displayDuration);
-  });
-}
-
-// Fly hook text
-function flyHookText(lineId, delay=0){
-  const line = document.getElementById(lineId);
-  const text = line.innerText;
-  line.innerHTML = "";
-  const words = text.split(" ");
-  words.forEach((word,i)=>{
-    const span = document.createElement("span");
-    span.innerText = word + " ";
-    span.style.display="inline-block";
-    span.style.opacity=0;
-    span.style.transform="translateX(-50px) scale(0.5)";
-    span.style.transition="transform 0.8s ease, opacity 0.8s ease";
-    line.appendChild(span);
-    setTimeout(()=>{
-      span.style.opacity=1;
-      span.style.transform="translateX(0) scale(1)";
-    }, delay + i*150);
-  });
-  setTimeout(()=>line.classList.add("wave"), delay + words.length*150 + 500);
-}
-
-// Show next rationale image and trigger cascade & hook
+// Show next rationale
 function showNextRationale(){
   image.src = rationaleImages[currentRationale];
-  rationale.className = "rationale";
-  quizText.className = "quiz-text";
+  rationale.className="rationale";
+  quizText.className="quiz-text";
   quizText.innerHTML = quizText.dataset.text;
 
   image.onload = ()=>{
     fitImage(image);
     setTimeout(()=> rationale.classList.add("show"),100);
     setTimeout(()=>{
-      rationale.classList.add("up");
-      quizText.classList.add("show");
-      splitWords(quizText);
-      flyWords(quizText, 80);
-    },900);
-    setTimeout(()=>{
-      rationale.classList.remove("up");
-      quizText.classList.remove("show");
-      showCascade(); // cascade images
-      // trigger hook flying in
-      flyHookText("hookLine1", 200);
-      flyHookText("hookLine2", 1200);
-    }, displayDuration - 1200);
+      rationale.classList.remove("show");
+      showCascade();
+      showHook();
+    }, displayDuration-800);
   }
 
-  currentRationale = (currentRationale + 1) % rationaleImages.length;
-  setTimeout(showNextRationale, displayDuration + 1500);
+  currentRationale = (currentRationale +1) % rationaleImages.length;
+  setTimeout(showNextRationale, displayDuration+1000);
+}
+
+// Cascade images inside screen naturally
+function showCascade(){
+  cascadeContainer.innerHTML="";
+  cascadeImages.forEach((src,i)=>{
+    const img=document.createElement("img");
+    img.src=src;
+    cascadeContainer.appendChild(img);
+    setTimeout(()=>{
+      img.style.opacity=1;
+      img.style.transform="scale(1) translateY(0)";
+    },i*400);
+    setTimeout(()=>img.remove(), displayDuration);
+  });
+}
+
+// Hook animation
+function showHook(){
+  [hookLine1, hookLine2].forEach((line,i)=>{
+    line.style.opacity=1;
+    setTimeout(()=>{
+      line.style.transform="translateY(0) scale(1)";
+    }, i*400);
+  });
 }
 
 // Start loop
