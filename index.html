@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Demo</title>
+<title>SNBT Video Demo</title>
 
 <style>
 body{
@@ -12,6 +12,8 @@ body{
   font-family:system-ui;
   overflow:hidden;
 }
+
+/* SCENE */
 .scene{
   height:100vh;
   display:flex;
@@ -19,6 +21,8 @@ body{
   align-items:center;
   perspective:1200px;
 }
+
+/* PHONE */
 .phone{
   width:230px;
   height:460px;
@@ -27,14 +31,19 @@ body{
   transform:rotateX(8deg) rotateY(-14deg);
   animation:float 6s ease-in-out infinite;
 }
+
+/* BODY */
 .body{
   position:absolute;
   inset:0;
   border-radius:34px;
   background:linear-gradient(145deg,#0f172a,#020617);
-  box-shadow:0 40px 80px rgba(0,0,0,.7),
-             inset 0 0 0 2px #475569;
+  box-shadow:
+    0 40px 80px rgba(0,0,0,.7),
+    inset 0 0 0 2px #475569;
 }
+
+/* SCREEN */
 .screen{
   position:absolute;
   inset:10px;
@@ -43,18 +52,15 @@ body{
   background:#000;
   transform:translateZ(8px);
 }
-.figure{
-  position:absolute;
-  inset:0;
+
+/* VIDEO */
+video{
   width:100%;
   height:100%;
   object-fit:cover;
-  opacity:0;
-  transition:opacity .6s ease;
 }
-.figure.active{
-  opacity:1;
-}
+
+/* GLASS */
 .glass{
   position:absolute;
   inset:6px;
@@ -68,21 +74,15 @@ body{
   transform:translateZ(12px);
   pointer-events:none;
 }
-.cta{
-  position:absolute;
-  bottom:12px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:11px;
-  color:#38bdf8;
-  background:rgba(2,6,23,.75);
-  padding:6px 10px;
-  border-radius:10px;
-  backdrop-filter:blur(4px);
-}
+
+/* FLOAT */
 @keyframes float{
-  0%,100%{transform:rotateX(8deg) rotateY(-14deg) translateY(0)}
-  50%{transform:rotateX(10deg) rotateY(-12deg) translateY(-10px)}
+  0%,100%{
+    transform:rotateX(8deg) rotateY(-14deg) translateY(0);
+  }
+  50%{
+    transform:rotateX(10deg) rotateY(-12deg) translateY(-10px);
+  }
 }
 </style>
 </head>
@@ -95,28 +95,16 @@ body{
     <div class="body"></div>
 
     <div class="screen">
-      <!-- URUTAN FIGURE -->
-      <img src="assets/img/quiz.png" class="figure active">
-      <img src="assets/img/rationale-half.png" class="figure">
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/demo-snbt.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
 
     <div class="glass"></div>
 
-    <div class="cta">▶ Lanjutkan Analisis</div>
-
   </div>
 </div>
-
-<script>
-const figures = document.querySelectorAll(".figure");
-let index = 0;
-
-setInterval(()=>{
-  figures[index].classList.remove("active");
-  index = (index + 1) % figures.length;
-  figures[index].classList.add("active");
-}, 2600); // timing mirip video Anda
-</script>
 
 </body>
 </html>
