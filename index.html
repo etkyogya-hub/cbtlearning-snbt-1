@@ -119,13 +119,13 @@ body{
 .rationale img{
   max-width:100%;
   max-height:100%;
-  object-fit: contain;        /* preserve aspect ratio */
+  object-fit: contain;        
   transform-origin: center center;
-  transform: scale(0.8);     /* start smaller */
-  transition: transform 5s ease-in-out;
+  transform: scale(0.8);     
+  transition: transform 2s ease-in-out;
 }
 .rationale.show img{
-  transform: scale(1);       /* zoom in */
+  transform: scale(1);       
 }
 .fallback{
   position:absolute;
@@ -163,7 +163,7 @@ body{
     </div>
 
     <div class="rationale" id="rationale">
-      <img id="image" src="https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg" alt="Quiz Image">
+      <img id="image" src="" alt="Quiz Image">
       <div class="fallback">Image tidak bisa dimuat. Periksa koneksi atau browser Anda.</div>
     </div>
 
@@ -182,7 +182,7 @@ const images = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
 ];
-let current = 0;
+let current = -1; // start at -1 so first increment shows first image
 
 /* SPLIT WORDS */
 function splitWords(el){
@@ -247,17 +247,4 @@ function showNextImage(){
 
   image.onload = () => {
     fitImage(image); // fit to screen preserving aspect ratio
-    setTimeout(()=>flyWords(quizText,140),1200);
-    setTimeout(()=>flyWords(hook,160),2600);
-    setTimeout(()=>rationale.classList.add("show"),4600); // zoom in
-  }
-
-  setTimeout(showNextImage, LOOP_DURATION);
-}
-
-// start the loop
-showNextImage();
-</script>
-
-</body>
-</html>
+    setTimeout(()=>flyWords(quizText,140),500)
