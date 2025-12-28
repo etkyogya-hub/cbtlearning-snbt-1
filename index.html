@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Mockup Image Loop with Word-Fly</title>
+<title>SNBT Mockup Image Loop with Cascading Raw Images</title>
 <style>
 body{
   margin:0;
@@ -56,7 +56,7 @@ body{
   50%{transform:translateY(20px)}
 }
 
-/* SCREEN - transparent */
+/* SCREEN */
 .screen{
   position:absolute;
   inset:10px;
@@ -69,7 +69,7 @@ body{
   flex-direction:column;
 }
 
-/* IMAGE CONTAINER */
+/* RATIONALE IMAGE */
 .rationale{
   position:absolute;
   inset:0;
@@ -93,6 +93,26 @@ body{
   transform: scale(1) translateY(-40px);
 }
 
+/* CASCADING RAW IMAGES */
+.cascade-container{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  pointer-events:none;
+}
+.cascade-container img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  position:absolute;
+  opacity:0;
+  transform: scale(0.5);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
 /* QUIZ TEXT */
 .quiz-text{
   position:absolute;
@@ -109,7 +129,7 @@ body{
   opacity:1;
 }
 
-/* WORD FLY CONTAINER */
+/* WORD FLY */
 .word-fly-container{
   position:absolute;
   inset:0;
@@ -166,6 +186,7 @@ body{
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
     </div>
+    <div class="cascade-container" id="cascadeContainer"></div>
     <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="wordFlyContainer"></div>
     <div class="hook-promo">SNBT tanpa bimbingan tapi detail dengan Rationale Generator</div>
@@ -174,21 +195,31 @@ body{
 </div>
 
 <script>
-// Image URLs
-const images = [
+// EXISTING RATIONALE IMAGES
+const rationaleImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
 ];
 
-let current = 0;
+// NEW CASCADE IMAGES
+const cascadeImages = [
+  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
+  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
+  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg",
+  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz5.jpg",
+  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz6.jpg"
+];
+
+let currentRationale = 0;
 const displayDuration = 5000;
 
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 const quizText = document.getElementById("quizText");
 const wordFlyContainer = document.getElementById("wordFlyContainer");
+const cascadeContainer = document.getElementById("cascadeContainer");
 
-// Split quiz text into spans
+// Split quiz text
 function splitWords(el){
   const text = el.dataset.text || el.innerText;
   el.dataset.text = text;
@@ -197,9 +228,8 @@ function splitWords(el){
 
 // Fly words function
 function flyWords(el, radius){
-  wordFlyContainer.innerHTML = ""; // clear previous
+  wordFlyContainer.innerHTML = "";
   const parentRect = wordFlyContainer.getBoundingClientRect();
-
   el.querySelectorAll("span").forEach((span,i)=>{
     const rect = span.getBoundingClientRect();
     const clone = span.cloneNode(true);
@@ -207,14 +237,12 @@ function flyWords(el, radius){
     clone.style.left = rect.left - parentRect.left + "px";
     clone.style.top = rect.top - parentRect.top + "px";
     wordFlyContainer.appendChild(clone);
-
     setTimeout(()=>{
       const angle = Math.random()*Math.PI*2;
       const distance = Math.random()*radius + 20;
       clone.style.transform = `translate(${Math.cos(angle)*distance}px,${Math.sin(angle)*distance}px) scale(2.2)`;
       clone.classList.add("out");
     }, i*120);
-
     setTimeout(()=>clone.remove(),1800);
   });
 }
@@ -233,36 +261,52 @@ function fitImage(img){
   }
 }
 
-// Show next image with quiz and word-fly
-function showNextImage(){
-  image.src = images[current];
+// Show cascading images
+function showCascade(){
+  cascadeContainer.innerHTML = "";
+  cascadeImages.forEach((src,i)=>{
+    const img = document.createElement("img");
+    img.src = src;
+    cascadeContainer.appendChild(img);
+    setTimeout(()=>{
+      img.style.opacity=1;
+      img.style.transform="scale(1)";
+    }, i*400); // staggered cascade
+    setTimeout(()=>img.remove(), displayDuration);
+  });
+}
+
+// Show next rationale image and trigger cascade
+function showNextRationale(){
+  image.src = rationaleImages[currentRationale];
   rationale.className = "rationale";
   quizText.className = "quiz-text";
   quizText.innerHTML = quizText.dataset.text;
 
   image.onload = ()=>{
     fitImage(image);
-    setTimeout(()=> rationale.classList.add("show"),100); // zoom in
+    setTimeout(()=> rationale.classList.add("show"),100);
 
     setTimeout(()=>{
-      rationale.classList.add("up");     // move up
-      quizText.classList.add("show");    // show quiz
+      rationale.classList.add("up");
+      quizText.classList.add("show");
       splitWords(quizText);
-      flyWords(quizText, 80);            // word-fly effect
+      flyWords(quizText, 80);
     },900);
 
     setTimeout(()=>{
-      rationale.classList.remove("up");  // move down
-      quizText.classList.remove("show"); // hide quiz
+      rationale.classList.remove("up");
+      quizText.classList.remove("show");
+      showCascade(); // trigger new cascade after rationale moves up
     }, displayDuration - 1200);
   }
 
-  current = (current + 1) % images.length;
-  setTimeout(showNextImage, displayDuration);
+  currentRationale = (currentRationale + 1) % rationaleImages.length;
+  setTimeout(showNextRationale, displayDuration + 1000);
 }
 
 // Start loop
-showNextImage();
+showNextRationale();
 </script>
 
 </body>
