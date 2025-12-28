@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Auto Loop Motion</title>
+<title>SNBT Auto Loop Motion - Highlight SNBT</title>
 
 <style>
 body{
@@ -143,13 +143,16 @@ body{
   opacity:0;
   transform:translateY(8px) scale(.96);
   animation:subPop .4s cubic-bezier(.22,.9,.22,1) forwards;
+  color:#fff;
 }
-@keyframes subPop{
-  to{
-    opacity:1;
-    transform:none;
-  }
+.subtitle span.keyword{
+  color:#38bdf8; /* biru SNBT */
+  text-shadow:0 4px 12px rgba(0,0,0,.85);
+  transform:translateY(12px) scale(1.1);
+  animation:subPopKeyword .5s cubic-bezier(.22,.9,.22,1) forwards;
 }
+@keyframes subPop{to{opacity:1;transform:none;}}
+@keyframes subPopKeyword{to{opacity:1;transform:none;}}
 
 /* CTA */
 .cta{
@@ -231,10 +234,10 @@ const cta = document.getElementById("cta");
 const LOOP_DURATION = 8800;
 
 const subtitleLines = [
-  "Ini bukan tebak-tebakan",
+  "Ini bukan tebak-tebakan SNBT",
   "Ini cara berpikir soal SNBT",
   "Lihat pola soalnya",
-  "Jawaban bisa diprediksi"
+  "Jawaban bisa diprediksi SNBT"
 ];
 
 /* SPLIT WORDS */
@@ -266,7 +269,7 @@ function flyWords(el, radius){
   });
 }
 
-/* SUBTITLE */
+/* SUBTITLE - HIGHLIGHT KEYWORD SNBT */
 function showSubtitle(text, startDelay=0, beat=800){
   setTimeout(()=>{
     subtitle.innerHTML = "";
@@ -275,6 +278,9 @@ function showSubtitle(text, startDelay=0, beat=800){
       span.textContent = word + " ";
       span.style.animationDelay = (i*beat/1000)+"s";
       span.style.animationDuration = ".4s";
+      if(word.toUpperCase().includes("SNBT")){
+        span.classList.add("keyword");
+      }
       subtitle.appendChild(span);
     });
   }, startDelay);
@@ -321,7 +327,6 @@ function run(){
   setTimeout(run, LOOP_DURATION);
 }
 
-/* START WHEN VIDEO READY */
 video.addEventListener("canplay", ()=>{
   run();
 });
