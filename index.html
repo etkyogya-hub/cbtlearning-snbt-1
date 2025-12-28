@@ -174,7 +174,7 @@ const hook = document.getElementById("hook");
 const rationale = document.getElementById("rationale");
 const image = document.getElementById("image");
 
-const LOOP_DURATION = 9000; // Total loop duration for each image
+const LOOP_DURATION = 9000; // Duration for each image
 const images = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
@@ -190,7 +190,7 @@ function splitWords(el){
 splitWords(quizText);
 splitWords(hook);
 
-/* WORD FLY ANIMATION */
+/* WORD FLY */
 function flyWords(el, radius){
   el.querySelectorAll("span").forEach((span,i)=>{
     const r = span.getBoundingClientRect();
@@ -221,25 +221,23 @@ function resetState(){
   splitWords(hook);
 }
 
-/* SHOW NEXT IMAGE WITH ZOOM AND LOOP */
+/* SEQUENTIAL IMAGE LOOP */
 function showNextImage(){
   resetState();
   current = (current + 1) % images.length;
   image.src = images[current];
 
+  // Wait for image to load before showing + zoom
   image.onload = () => {
     setTimeout(()=>flyWords(quizText,140),1200);
     setTimeout(()=>flyWords(hook,160),2600);
-
-    setTimeout(()=>{
-      rationale.classList.add("show"); // trigger zoom + opacity
-    },4600);
+    setTimeout(()=>rationale.classList.add("show"),4600);
   }
 
   setTimeout(showNextImage, LOOP_DURATION);
 }
 
-// Start the image sequence
+// Start loop
 showNextImage();
 </script>
 
