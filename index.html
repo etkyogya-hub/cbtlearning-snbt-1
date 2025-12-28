@@ -2,15 +2,14 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3D Phone Mockup</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SNBT Phone Mockup</title>
 
 <style>
 body{
   margin:0;
   background:radial-gradient(circle at top,#020617,#000);
   font-family:system-ui;
-  color:#e5e7eb;
   overflow:hidden;
 }
 
@@ -25,122 +24,79 @@ body{
 
 /* PHONE 3D */
 .phone{
-  width:220px;
-  height:440px;
+  width:230px;
+  height:460px;
   position:relative;
-  transform:
-    rotateX(8deg)
-    rotateY(-14deg);
   transform-style:preserve-3d;
+  transform:rotateX(8deg) rotateY(-14deg);
   animation:float 6s ease-in-out infinite;
 }
 
-/* PHONE BODY */
+/* BODY */
 .body{
-  width:100%;
-  height:100%;
+  position:absolute;
+  inset:0;
+  border-radius:34px;
   background:linear-gradient(145deg,#0f172a,#020617);
-  border-radius:32px;
   box-shadow:
     0 40px 80px rgba(0,0,0,.7),
     inset 0 0 0 2px #475569;
-  position:absolute;
-}
-
-/* GLASS */
-.glass{
-  position:absolute;
-  inset:6px;
-  border-radius:26px;
-  background:linear-gradient(
-    120deg,
-    rgba(255,255,255,.18),
-    rgba(255,255,255,.02) 35%,
-    rgba(255,255,255,.12)
-  );
-  transform:translateZ(6px);
 }
 
 /* SCREEN */
 .screen{
   position:absolute;
   inset:10px;
-  border-radius:22px;
-  background:#0f172a;
+  border-radius:26px;
   overflow:hidden;
+  background:#000;
   transform:translateZ(8px);
 }
 
-/* STATUS BAR */
-.status{
-  height:22px;
-  font-size:10px;
-  padding:4px 8px;
-  display:flex;
-  justify-content:space-between;
-  color:#94a3b8;
-}
-
-/* CONTENT */
-.content{
-  animation:scroll 7s ease-in-out infinite;
-}
-.card{
-  padding:12px;
-  border-bottom:1px solid #1e293b;
-}
-h4{
-  font-size:12px;
-  margin:0 0 6px;
-}
-.option{
-  font-size:11px;
-  padding:6px;
-  border:1px solid #334155;
-  border-radius:6px;
-  margin-bottom:4px;
-}
-.correct{
-  border-color:#22c55e;
-  background:rgba(34,197,94,.1);
-}
-
-/* RATIONALE PREVIEW */
-.rationale{
-  position:relative;
-  font-size:10px;
-  color:#94a3b8;
-  max-height:44px;
-  overflow:hidden;
-}
-.fade{
-  position:absolute;
-  bottom:0;
-  left:0;
+/* IMAGE FIGURE */
+.figure{
   width:100%;
-  height:22px;
-  background:linear-gradient(transparent,#0f172a);
+  height:100%;
+  object-fit:cover;
 }
 
-/* CTA */
+/* GLASS */
+.glass{
+  position:absolute;
+  inset:6px;
+  border-radius:28px;
+  background:linear-gradient(
+    120deg,
+    rgba(255,255,255,.22),
+    rgba(255,255,255,.03) 40%,
+    rgba(255,255,255,.15)
+  );
+  pointer-events:none;
+  transform:translateZ(12px);
+}
+
+/* CTA OVERLAY */
 .cta{
-  font-size:10px;
-  text-align:center;
-  padding:6px;
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:11px;
   color:#38bdf8;
-  border-top:1px dashed #334155;
+  background:rgba(2,6,23,.75);
+  padding:6px 10px;
+  border-radius:10px;
+  backdrop-filter:blur(4px);
 }
 
-/* ANIMATION */
+/* ANIM */
 @keyframes float{
-  0%,100%{transform:rotateX(8deg) rotateY(-14deg) translateY(0)}
-  50%{transform:rotateX(10deg) rotateY(-12deg) translateY(-10px)}
-}
-@keyframes scroll{
-  0%{transform:translateY(0)}
-  40%{transform:translateY(-38%)}
-  55%{transform:translateY(-38%)}
-  100%{transform:translateY(0)}
+  0%,100%{
+    transform:rotateX(8deg) rotateY(-14deg) translateY(0);
+  }
+  50%{
+    transform:rotateX(10deg) rotateY(-12deg) translateY(-10px);
+  }
 }
 </style>
 </head>
@@ -150,41 +106,22 @@ h4{
 <div class="scene">
 
   <div class="phone">
+
     <div class="body"></div>
 
     <div class="screen">
-      <div class="status">
-        <span>09:41</span>
-        <span>CBT</span>
-      </div>
-
-      <div class="content">
-
-        <div class="card">
-          <h4>Soal — Penalaran Umum</h4>
-          <div class="option">A. Inferensi langsung</div>
-          <div class="option">B. Asumsi tersembunyi</div>
-          <div class="option correct">C. Kesimpulan logis ✔</div>
-          <div class="option">D. Distraktor</div>
-        </div>
-
-        <div class="card">
-          <h4>Rationale Generator</h4>
-          <div class="rationale">
-            Jawaban C dipilih karena konsisten dengan premis utama
-            dan mengeliminasi distraktor berbasis asumsi...
-            <div class="fade"></div>
-          </div>
-        </div>
-
-        <div class="cta">
-          ▶ Lanjutkan Analisis
-        </div>
-
-      </div>
+      <!-- GANTI GAMBAR SESUAI URUTAN -->
+      <img src="assets/img/quiz.png" class="figure" alt="Quiz CBT">
+      <!-- ATAU -->
+      <!-- <img src="assets/img/rationale-half.png" class="figure" alt="Rationale Generator"> -->
     </div>
 
     <div class="glass"></div>
+
+    <div class="cta">
+      ▶ Lanjutkan Analisis
+    </div>
+
   </div>
 
 </div>
