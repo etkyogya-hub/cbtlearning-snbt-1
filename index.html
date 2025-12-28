@@ -1,241 +1,172 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-<title>SNBT CBT Simulator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SNBT Mockup</title>
 
 <style>
-/* ===== RESET ===== */
-*{box-sizing:border-box}
 body{
   margin:0;
   background:#020617;
   color:#e5e7eb;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  overflow:auto;
-  padding:
-    env(safe-area-inset-top)
-    env(safe-area-inset-right)
-    env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
+  font-family:system-ui;
+  overflow:hidden;
 }
-
-/* ===== TYPO SAFE ===== */
-:root{
-  --hero:clamp(9rem,15vw,18rem);
-  --xl:clamp(4.5rem,7vw,8rem);
-  --md:clamp(1.6rem,3vw,2.6rem);
-}
-
-/* ===== STAGE ===== */
-#stage{
-  width:100%;
+.scene{
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  transform-origin:center;
+  position:relative;
 }
 
-/* ===== SCENES ===== */
-.scene{
+/* BACK TEXT */
+.hero{
   position:absolute;
-  width:100%;
-  height:100%;
+  left:4%;
+  font-size:16vw;
+  font-weight:900;
+  opacity:.1;
+}
+
+/* PHONE */
+.phone{
+  width:190px;
+  height:380px;
+  border-radius:26px;
+  border:2px solid #475569;
+  background:#020617;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+
+/* STATUS */
+.status{
+  height:22px;
+  font-size:10px;
+  padding:4px 8px;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .35s ease;
-}
-.scene.active{
-  opacity:1;
-  pointer-events:auto;
+  justify-content:space-between;
+  color:#94a3b8;
 }
 
-.big{font-size:var(--hero);font-weight:900;line-height:.9}
-.xl{font-size:var(--xl);font-weight:800}
-.sm{font-size:var(--md);opacity:.8}
-.stack{font-size:var(--md);letter-spacing:.08em}
-
-.circle{
-  border:1px solid #e5e7eb;
-  border-radius:999px;
-  padding:8px 18px;
-  margin-bottom:20px;
-  font-size:14px;
-}
-
-/* ===== PROGRESS ===== */
-#progress{
-  position:fixed;
-  top:14px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:6px;
-  width:92%;
-  max-width:420px;
-}
-#progress span{
-  flex:1;
-  height:3px;
-  background:#1e293b;
+/* SCREEN */
+.screen{
+  background:#0f172a;
+  height:calc(100% - 22px);
   overflow:hidden;
 }
-#progress span.active::after{
-  content:'';
-  display:block;
-  height:100%;
-  background:#e5e7eb;
-  animation:fill linear forwards;
-}
-@keyframes fill{from{width:0}to{width:100%}}
 
-/* ===== CTA ===== */
-.cta{
-  position:absolute;
-  bottom:12%;
-  padding:14px 22px;
-  border-radius:14px;
-  background:#e5e7eb;
-  color:#020617;
-  font-weight:700;
-  text-decoration:none;
-  font-size:15px;
-  opacity:0;
-  transform:translateY(18px);
-  animation:ctaIn .8s ease forwards;
-  animation-delay:.6s;
+/* CONTENT */
+.content{
+  animation:scroll 7s ease-in-out infinite;
 }
-@keyframes ctaIn{to{opacity:1;transform:none}}
+.card{
+  padding:12px;
+  border-bottom:1px solid #1e293b;
+}
+h4{
+  margin:0 0 6px;
+  font-size:12px;
+}
+
+/* OPTIONS */
+.option{
+  font-size:11px;
+  padding:6px;
+  border-radius:6px;
+  border:1px solid #334155;
+  margin-bottom:4px;
+}
+.correct{
+  border-color:#22c55e;
+  background:rgba(34,197,94,.1);
+}
+
+/* RATIONALE PREVIEW */
+.rationale{
+  position:relative;
+  font-size:10px;
+  color:#94a3b8;
+  max-height:44px;
+  overflow:hidden;
+  margin-top:6px;
+}
+.fade{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:22px;
+  background:linear-gradient(transparent,#0f172a);
+}
+
+/* CTA */
+.cta{
+  font-size:10px;
+  text-align:center;
+  padding:6px;
+  color:#38bdf8;
+  border-top:1px dashed #334155;
+}
+
+/* SCROLL ANIM */
+@keyframes scroll{
+  0%{transform:translateY(0)}
+  40%{transform:translateY(-38%)}
+  55%{transform:translateY(-38%)}
+  100%{transform:translateY(0)}
+}
 </style>
 </head>
 
 <body>
 
-<div id="progress">
-  <span></span><span></span><span></span>
-  <span></span><span></span><span></span><span></span>
-</div>
-
-<div id="stage">
-
-<!-- SCENE 1 -->
-<div class="scene active">
-  <div class="big">SNBT</div>
-</div>
-
-<!-- SCENE 2 -->
 <div class="scene">
-  <div class="big">BUKAN</div>
-  <div class="stack">HAFALAN</div>
+
+  <div class="hero">SNBT</div>
+
+  <div class="phone">
+
+    <div class="status">
+      <span>09:41</span>
+      <span>CBT</span>
+    </div>
+
+    <div class="screen">
+      <div class="content">
+
+        <!-- QUIZ -->
+        <div class="card">
+          <h4>Soal — Penalaran Umum</h4>
+          <div class="option">A. Inferensi langsung</div>
+          <div class="option">B. Asumsi tersembunyi</div>
+          <div class="option correct">C. Kesimpulan logis ✔</div>
+          <div class="option">D. Distraktor</div>
+        </div>
+
+        <!-- RATIONALE PREVIEW -->
+        <div class="card">
+          <h4>Rationale Generator</h4>
+          <div class="rationale">
+            Jawaban C dipilih karena selaras dengan premis utama
+            yang dinyatakan secara eksplisit dalam teks soal.
+            Opsi A dan B dieliminasi karena...
+            <div class="fade"></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+          ▶ Lanjutkan Analisis
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </div>
-
-<!-- SCENE 3 -->
-<div class="scene">
-  <div class="xl">POLA</div>
-  <div class="stack">BERPIKIR</div>
-</div>
-
-<!-- SCENE 4 -->
-<div class="scene">
-  <div class="circle">CBT • MOBILE</div>
-  <div class="xl">SIMULASI</div>
-</div>
-
-<!-- SCENE 5 -->
-<div class="scene">
-  <div class="xl">MANDIRI</div>
-</div>
-
-<!-- SCENE 6 -->
-<div class="scene">
-  <div class="circle">UNTUK ORANG TUA</div>
-  <div class="big">TIDAK</div>
-  <div class="stack">JANJI INSTAN</div>
-</div>
-
-<!-- SCENE 7 CTA -->
-<div class="scene">
-  <div class="xl">SYSTEM</div>
-  <div class="sm">BUILT BY G. ASFARRASYID</div>
-  <a class="cta" href="quiz/index.html">Mulai Simulasi CBT →</a>
-</div>
-
-</div>
-
-<script>
-/* ===== AUTO SCALE BY ASPECT RATIO ===== */
-function autoScale(){
-  const baseW = 390;
-  const baseH = 844;
-  const scale = Math.min(
-    window.innerWidth / baseW,
-    window.innerHeight / baseH
-  );
-  document.getElementById('stage')
-    .style.transform = `scale(${scale})`;
-}
-window.addEventListener('resize',autoScale);
-autoScale();
-
-/* ===== SCENE ENGINE + TRACKING ===== */
-const scenes=document.querySelectorAll('.scene');
-const bars=document.querySelectorAll('#progress span');
-let index=0,delay=3000;
-
-let stats=JSON.parse(localStorage.getItem('snbtTrack'))||{
-  scenes:Array(scenes.length).fill(0),
-  reachedCTA:false,
-  ctaClicked:false
-};
-let start=Date.now();
-
-function show(n){
-  let now=Date.now();
-  stats.scenes[index]+=now-start;
-  start=now;
-
-  scenes.forEach(s=>s.classList.remove('active'));
-  bars.forEach(b=>{
-    b.classList.remove('active');
-    b.style.animation='none';
-    b.offsetHeight;
-  });
-
-  scenes[n].classList.add('active');
-  bars[n].classList.add('active');
-  bars[n].style.animationDuration=delay+'ms';
-
-  if(n===scenes.length-1) stats.reachedCTA=true;
-  localStorage.setItem('snbtTrack',JSON.stringify(stats));
-}
-
-let timer=setInterval(()=>{
-  index++;
-  if(index>=scenes.length){clearInterval(timer);return;}
-  show(index);
-},delay);
-
-document.body.addEventListener('click',()=>{
-  clearInterval(timer);
-  index++;
-  if(index>=scenes.length)return;
-  show(index);
-});
-
-document.querySelector('.cta')?.addEventListener('click',()=>{
-  stats.ctaClicked=true;
-  localStorage.setItem('snbtTrack',JSON.stringify(stats));
-});
-</script>
 
 </body>
 </html>
