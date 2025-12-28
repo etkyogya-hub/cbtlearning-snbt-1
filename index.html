@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SNBT Mockup Natural Cascade</title>
+<title>SNBT Mockup Book Cascade</title>
 <style>
 body{
   margin:0;
@@ -94,7 +94,7 @@ body{
   align-items:center;
   pointer-events:none;
   overflow:hidden;
-  z-index:40;
+  z-index:60;
 }
 .hook-line{
   white-space: nowrap;
@@ -127,7 +127,7 @@ body{
   opacity:0;
   transform: scale(0.5) translateY(20px);
   transition: all 0.6s ease;
-  z-index:30;
+  z-index:40;
 }
 .rationale.show{
   opacity:1;
@@ -155,7 +155,7 @@ body{
   opacity:1;
 }
 
-/* Cascade Images */
+/* Cascade Images (book-style stacking) */
 .cascade-container{
   position:absolute;
   top:80px;
@@ -165,12 +165,12 @@ body{
   justify-content:center;
   align-items:flex-start;
   pointer-events:none;
-  z-index:20;
+  z-index:30;
 }
 .cascade-container img{
   position:absolute;
-  max-width:80%;
-  max-height:80%;
+  width:80%;
+  height:auto;
   object-fit:contain;
   opacity:0;
   transform: scale(0.5) translateY(0);
@@ -182,7 +182,7 @@ body{
   position:absolute;
   inset:0;
   pointer-events:none;
-  z-index:60;
+  z-index:70;
 }
 .word-fly{
   position:absolute;
@@ -190,7 +190,7 @@ body{
   font-weight:700;
   pointer-events:none;
   transition:transform 1.2s cubic-bezier(.22,.9,.22,1), opacity 1s ease;
-  z-index:60;
+  z-index:70;
 }
 .word-fly.out{opacity:0;}
 </style>
@@ -278,16 +278,17 @@ function fitImage(img){
   else {img.style.width='auto'; img.style.height='100%';}
 }
 
-// Cascade images naturally down
+// Cascade images (book stacking)
 function showCascade(){
   cascadeContainer.innerHTML="";
   cascadeImages.forEach((src,i)=>{
     const img=document.createElement("img");
     img.src=src;
+    img.style.zIndex = 10 + i; // lower images below
     cascadeContainer.appendChild(img);
     setTimeout(()=>{
       img.style.opacity=1;
-      img.style.transform=`scale(1) translateY(${i*12}px)`; // each image shifts down 1/10 approx
+      img.style.transform=`scale(1) translateY(${i*15}px)`; // each image shifted down
     },i*400);
     setTimeout(()=>img.remove(), displayDuration);
   });
