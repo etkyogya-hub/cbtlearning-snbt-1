@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Motion + Rationale</title>
+<title>SNBT Auto Loop Motion</title>
 
 <style>
 body{
@@ -17,7 +17,7 @@ body{
   overflow:hidden;
 }
 
-/* ================= MOCKUP 3D ================= */
+/* MOCKUP 3D */
 .phone{
   width:230px;
   height:460px;
@@ -29,7 +29,6 @@ body{
   0%,100%{transform:translateY(0) rotateX(4deg) rotateY(-4deg)}
   50%{transform:translateY(-8px) rotateX(6deg) rotateY(-6deg)}
 }
-
 .body{
   position:absolute;
   inset:0;
@@ -39,8 +38,6 @@ body{
     0 50px 100px rgba(0,0,0,.75),
     inset 0 0 0 2px #334155;
 }
-
-/* rim light */
 .body::before{
   content:"";
   position:absolute;
@@ -71,7 +68,7 @@ body{
   font-size:12px;
 }
 
-/* ================= QUIZ ================= */
+/* QUIZ */
 .quiz p{font-weight:700;line-height:1.4}
 .quiz li{
   list-style:none;
@@ -81,7 +78,7 @@ body{
   border-radius:8px;
 }
 
-/* ================= WORD FLY ================= */
+/* WORD FLY */
 .word-fly{
   position:absolute;
   color:#fff;
@@ -93,7 +90,7 @@ body{
 }
 .word-fly.out{opacity:0}
 
-/* ================= HOOK ================= */
+/* HOOK */
 .hook{
   margin-top:16px;
   font-size:16px;
@@ -109,12 +106,12 @@ body{
   100%{transform:translateY(0)}
 }
 
-/* ================= VIDEO RATIONALE ================= */
+/* VIDEO */
 .rationale{
   position:absolute;
   inset:0;
   opacity:0;
-  transition:opacity 1s ease;
+  transition:opacity .8s ease;
 }
 .rationale.show{opacity:1}
 .rationale video{
@@ -131,7 +128,7 @@ body{
   <div class="body"></div>
   <div class="screen" id="screen">
 
-    <div class="quiz">
+    <div class="quiz" id="quiz">
       <p id="quizText">
         Jika 3x + 5 = 20, maka nilai x adalah
       </p>
@@ -147,7 +144,6 @@ body{
       </div>
     </div>
 
-    <!-- VIDEO RATIONALE -->
     <div class="rationale" id="rationale">
       <video muted playsinline preload="auto" id="video">
         <source src="https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/demo-snbt.mp4" type="video/mp4">
@@ -159,20 +155,24 @@ body{
 
 <script>
 const screen = document.getElementById("screen");
+const quiz = document.getElementById("quiz");
 const quizText = document.getElementById("quizText");
 const hook = document.getElementById("hook");
 const rationale = document.getElementById("rationale");
 const video = document.getElementById("video");
 
-/* split text */
+const LOOP_DURATION = 9000;
+
+/* SPLIT WORDS */
 function splitWords(el){
-  const words = el.innerText.split(" ");
-  el.innerHTML = words.map(w=>`<span>${w}</span>`).join(" ");
+  const text = el.dataset.text || el.innerText;
+  el.dataset.text = text;
+  el.innerHTML = text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
 }
 splitWords(quizText);
 splitWords(hook);
 
-/* fly words */
+/* WORD FLY */
 function flyWords(el, radius){
   el.querySelectorAll("span").forEach((span,i)=>{
     const r = span.getBoundingClientRect();
@@ -196,21 +196,33 @@ function flyWords(el, radius){
   });
 }
 
-/* TIMELINE */
-setTimeout(()=>flyWords(quizText,140),1200);
-setTimeout(()=>flyWords(hook,160),2600);
-
-/* VIDEO RATIONALE */
-setTimeout(()=>{
-  rationale.classList.add("show");
-  video.currentTime = 0;
-  video.play();
-},4600);
-
-/* pause as teaser */
-setTimeout(()=>{
+/* RESET */
+function resetState(){
+  rationale.classList.remove("show");
   video.pause();
-},7600);
+  video.currentTime = 0;
+  splitWords(quizText);
+  splitWords(hook);
+}
+
+/* SEQUENCE */
+function run(){
+  resetState();
+
+  setTimeout(()=>flyWords(quizText,140),1200);
+  setTimeout(()=>flyWords(hook,160),2600);
+
+  setTimeout(()=>{
+    rationale.classList.add("show");
+    video.play();
+  },4600);
+
+  setTimeout(()=>video.pause(),7200);
+
+  setTimeout(run, LOOP_DURATION);
+}
+
+run();
 </script>
 
 </body>
