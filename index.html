@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SNBT Mockup Book Cascade</title>
+<title>SNBT Mockup Book Cascade - Curved Hook</title>
 <style>
 body{
   margin:0;
@@ -60,8 +60,6 @@ body{
   align-items:center;
   padding-top:25px;
 }
-
-/* Branding */
 .branding{
   position:absolute;
   top:5px;
@@ -75,33 +73,24 @@ body{
   z-index:50;
 }
 
-/* Hook stays horizontal above images */
-.hook-container{
+/* Hook as SVG curved text */
+.hook-svg{
   position:absolute;
-  top:30px;
-  width:90%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  top:20px;
+  width:100%;
+  height:70px;
   pointer-events:none;
   z-index:70;
 }
-.hook-line{
-  white-space: nowrap;
+.hook-text{
+  font-size:1em;
+  fill:#38bdf8;
   font-weight:700;
-  display:flex;
-  justify-content:center;
-  transform: scale(0.5);
-  transition: all 0.6s ease;
 }
-.hook-line.big{
-  font-size:1.1em;
-  color:#38bdf8;
-  margin-bottom:4px;
-}
-.hook-line.small{
-  font-size:0.9em;
-  color:#fff;
+.hook-text-small{
+  font-size:0.8em;
+  fill:#fff;
+  font-weight:700;
 }
 
 /* Rationale Image */
@@ -129,7 +118,7 @@ body{
   object-fit:contain;
 }
 
-/* Cascade Images (book-style stacking) */
+/* Cascade Images */
 .cascade-container{
   position:absolute;
   top:150px;
@@ -204,17 +193,30 @@ body{
   <div class="screen">
     <div class="branding">ETK Yogya</div>
 
-    <div class="hook-container">
-      <div class="hook-line big" id="hookLine1">Persiapan Bedah Soal SNBT tanpa Pembimbing</div>
-      <div class="hook-line small" id="hookLine2">hanya dengan Rationale Generator</div>
-    </div>
+    <!-- Hook curved text using SVG -->
+    <svg class="hook-svg" viewBox="0 0 230 70">
+      <defs>
+        <path id="arcPath" d="M10,60 A110,50 0 0,1 220,60"/>
+        <path id="arcPathSmall" d="M15,65 A100,45 0 0,1 215,65"/>
+      </defs>
+      <text class="hook-text">
+        <textPath xlink:href="#arcPath" startOffset="50%" text-anchor="middle">
+          Persiapan Bedah Soal SNBT tanpa Pembimbing
+        </textPath>
+      </text>
+      <text class="hook-text-small">
+        <textPath xlink:href="#arcPathSmall" startOffset="50%" text-anchor="middle">
+          hanya dengan Rationale Generator
+        </textPath>
+      </text>
+    </svg>
 
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
     </div>
 
     <div class="cascade-container" id="cascadeContainer"></div>
-    <div class="quiz-text" id="quizText" data-text="SNBT|PEMBAHASAN| Jika 3x + 5 = 20, maka nilai x adalah"></div>
+    <div class="quiz-text" id="quizText" data-text="Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="wordFlyContainer"></div>
   </div>
 </div>
@@ -292,27 +294,6 @@ function showCascade(){
   });
 }
 
-// Hook animation
-function flyHookText(lineId, delay=0){
-  const line=document.getElementById(lineId);
-  const text=line.innerText;
-  line.innerHTML="";
-  const words=text.split(" ");
-  words.forEach((word,i)=>{
-    const span=document.createElement("span");
-    span.innerText=word+" ";
-    span.style.display="inline-block";
-    span.style.opacity=0;
-    span.style.transform="scale(0.5)";
-    span.style.transition="all 0.8s ease";
-    line.appendChild(span);
-    setTimeout(()=>{
-      span.style.opacity=1;
-      span.style.transform="scale(1)";
-    }, delay+i*150);
-  });
-}
-
 // Show next rationale
 function showNextRationale(){
   image.src=rationaleImages[currentRationale];
@@ -332,8 +313,6 @@ function showNextRationale(){
       rationale.classList.remove("show");
       quizText.classList.remove("show");
       showCascade();
-      flyHookText("hookLine1",200);
-      flyHookText("hookLine2",1200);
     }, displayDuration-1200);
   }
 
