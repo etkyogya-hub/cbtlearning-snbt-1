@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SNBT Mockup Book Cascade - Curved Hook</title>
+<title>SNBT Mockup Book Cascade - Clean Hook</title>
 <style>
 body{
   margin:0;
@@ -73,12 +73,12 @@ body{
   z-index:50;
 }
 
-/* Hook as SVG curved text */
+/* Main hook - curved text */
 .hook-svg{
   position:absolute;
   top:20px;
   width:100%;
-  height:70px;
+  height:50px;
   pointer-events:none;
   z-index:70;
 }
@@ -86,17 +86,25 @@ body{
   font-size:1em;
   fill:#38bdf8;
   font-weight:700;
+  letter-spacing: 1px;
 }
-.hook-text-small{
+
+/* Sub-title horizontal above images */
+.hook-subtitle{
+  position:absolute;
+  top:60px;
+  width:90%;
+  text-align:center;
+  color:#fff;
   font-size:0.8em;
-  fill:#fff;
   font-weight:700;
+  z-index:70;
 }
 
 /* Rationale Image */
 .rationale{
   position:absolute;
-  top:80px;
+  top:100px;
   width:90%;
   display:flex;
   justify-content:center;
@@ -121,7 +129,7 @@ body{
 /* Cascade Images */
 .cascade-container{
   position:absolute;
-  top:150px;
+  top:170px;
   width:100%;
   height:260px;
   display:flex;
@@ -193,23 +201,22 @@ body{
   <div class="screen">
     <div class="branding">ETK Yogya</div>
 
-    <!-- Hook curved text using SVG -->
-    <svg class="hook-svg" viewBox="0 0 230 70">
+    <!-- Main hook curved text -->
+    <svg class="hook-svg" viewBox="0 0 230 50">
       <defs>
-        <path id="arcPath" d="M10,60 A110,50 0 0,1 220,60"/>
-        <path id="arcPathSmall" d="M15,65 A100,45 0 0,1 215,65"/>
+        <path id="arcPath" d="M10,40 A110,30 0 0,1 220,40"/>
       </defs>
       <text class="hook-text">
         <textPath xlink:href="#arcPath" startOffset="50%" text-anchor="middle">
           Persiapan Bedah Soal SNBT tanpa Pembimbing
         </textPath>
       </text>
-      <text class="hook-text-small">
-        <textPath xlink:href="#arcPathSmall" startOffset="50%" text-anchor="middle">
-          hanya dengan Rationale Generator
-        </textPath>
-      </text>
     </svg>
+
+    <!-- Sub-title horizontal -->
+    <div class="hook-subtitle">
+      hanya dengan Rationale Generator
+    </div>
 
     <div class="rationale" id="rationale">
       <img id="image" src="" alt="Quiz Image">
