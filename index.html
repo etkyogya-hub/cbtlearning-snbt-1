@@ -60,6 +60,8 @@ body{
   align-items:center;
   padding-top:25px;
 }
+
+/* Branding */
 .branding{
   position:absolute;
   top:5px;
@@ -72,6 +74,8 @@ body{
   border-radius:4px;
   z-index:50;
 }
+
+/* Hook stays horizontal above images */
 .hook-container{
   position:absolute;
   top:30px;
@@ -80,8 +84,7 @@ body{
   flex-direction:column;
   align-items:center;
   pointer-events:none;
-  overflow:hidden;
-  z-index:60;
+  z-index:70;
 }
 .hook-line{
   white-space: nowrap;
@@ -100,6 +103,8 @@ body{
   font-size:0.9em;
   color:#fff;
 }
+
+/* Rationale Image */
 .rationale{
   position:absolute;
   top:80px;
@@ -122,23 +127,11 @@ body{
   height:auto;
   object-fit:contain;
 }
-.quiz-text{
-  position:absolute;
-  bottom:10px;
-  width:90%;
-  color:#fff;
-  font-weight:700;
-  text-align:center;
-  opacity:0;
-  transition: opacity 0.5s ease;
-  z-index:50;
-}
-.quiz-text.show{
-  opacity:1;
-}
+
+/* Cascade Images (book-style stacking) */
 .cascade-container{
   position:absolute;
-  top:80px;
+  top:150px;
   width:100%;
   height:260px;
   display:flex;
@@ -156,11 +149,29 @@ body{
   transform: scale(0.5) translateY(0);
   transition: all 0.6s ease;
 }
+
+/* Quiz Text */
+.quiz-text{
+  position:absolute;
+  bottom:10px;
+  width:90%;
+  color:#fff;
+  font-weight:700;
+  text-align:center;
+  opacity:0;
+  transition: opacity 0.5s ease;
+  z-index:50;
+}
+.quiz-text.show{
+  opacity:1;
+}
+
+/* Word Fly */
 .word-fly-container{
   position:absolute;
   inset:0;
   pointer-events:none;
-  z-index:70;
+  z-index:60;
 }
 .word-fly{
   position:absolute;
@@ -168,7 +179,7 @@ body{
   font-weight:700;
   pointer-events:none;
   transition:transform 1.2s cubic-bezier(.22,.9,.22,1), opacity 1s ease;
-  z-index:70;
+  z-index:60;
 }
 .word-fly.out{opacity:0;}
 </style>
@@ -196,7 +207,6 @@ body{
 </div>
 
 <script>
-// Images
 const rationaleImages = [
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
   "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
@@ -214,8 +224,6 @@ const image = document.getElementById("image");
 const quizText = document.getElementById("quizText");
 const wordFlyContainer = document.getElementById("wordFlyContainer");
 const cascadeContainer = document.getElementById("cascadeContainer");
-const hookLine1 = document.getElementById("hookLine1");
-const hookLine2 = document.getElementById("hookLine2");
 
 // Split quiz words
 function splitWords(el){
@@ -254,7 +262,7 @@ function fitImage(img){
   else {img.style.width='auto'; img.style.height='100%';}
 }
 
-// Cascade images (book stacking)
+// Cascade images
 function showCascade(){
   cascadeContainer.innerHTML="";
   rationaleImages.forEach((src,i)=>{
@@ -270,7 +278,7 @@ function showCascade(){
   });
 }
 
-// Hook animation
+// Hook animation (stays horizontal)
 function flyHookText(lineId, delay=0){
   const line=document.getElementById(lineId);
   const text=line.innerText;
@@ -319,7 +327,7 @@ function showNextRationale(){
   setTimeout(showNextRationale, displayDuration+1500);
 }
 
-// Start animation
+// Start
 showNextRationale();
 </script>
 
