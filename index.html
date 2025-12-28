@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Image Loop with Word-Fly Quiz</title>
+<title>SNBT Mockup Image Loop with Word-Fly</title>
 <style>
 body{
   margin:0;
@@ -16,7 +16,7 @@ body{
   overflow:hidden;
 }
 
-/* MOCKUP 3D */
+/* MOCKUP 3D PHONE */
 .phone{
   width:230px;
   height:460px;
@@ -56,12 +56,12 @@ body{
   50%{transform:translateY(20px)}
 }
 
-/* SCREEN */
+/* SCREEN - transparent to show image */
 .screen{
   position:absolute;
   inset:10px;
   border-radius:26px;
-  background:#020617;
+  background:transparent; /* remove blocking blue */
   overflow:hidden;
   display:flex;
   justify-content:center;
@@ -120,7 +120,7 @@ body{
 }
 .word-fly.out{opacity:0}
 
-/* HOOK PROMOTION */
+/* HOOK PROMO */
 .hook-promo{
   position:absolute;
   bottom:5px;
@@ -194,7 +194,6 @@ function flyWords(el, radius){
 
   el.querySelectorAll("span").forEach((span,i)=>{
     const rect = span.getBoundingClientRect();
-
     const clone = span.cloneNode(true);
     clone.className="word-fly";
     clone.style.left = rect.left - screenRect.left + "px";
@@ -217,7 +216,6 @@ function fitImage(img){
   const screenRect = img.parentElement.getBoundingClientRect();
   const imgRatio = img.naturalWidth / img.naturalHeight;
   const screenRatio = screenRect.width / screenRect.height;
-
   if(imgRatio > screenRatio){
     img.style.width='100%';
     img.style.height='auto';
@@ -236,17 +234,17 @@ function showNextImage(){
 
   image.onload = () => {
     fitImage(image);
-    setTimeout(()=>rationale.classList.add("show"),100);
+    setTimeout(()=>rationale.classList.add("show"),100);  // zoom in
     setTimeout(()=>{
-      rationale.classList.add("up");
-      quizText.classList.add("show");
+      rationale.classList.add("up");  // move up
+      quizText.classList.add("show");  // show quiz
       splitWords(quizText);
-      flyWords(quizText, 80);
+      flyWords(quizText, 80);          // word-fly effect
     }, 800);
 
     setTimeout(()=>{
-      rationale.classList.remove("up");
-      quizText.classList.remove("show");
+      rationale.classList.remove("up"); // move down
+      quizText.classList.remove("show"); // hide quiz
     }, displayDuration - 1200);
   }
 
