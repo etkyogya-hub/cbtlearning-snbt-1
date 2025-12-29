@@ -4,298 +4,68 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>SNBT Mockup – Elegant Cascade</title>
-
 <style>
-body{
-  margin:0;
-  height:100vh;
-  background:#020617;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-family:system-ui,-apple-system,Segoe UI;
-  overflow:hidden;
-}
-
-/* PHONE */
-.phone{
-  width:230px;
-  height:460px;
-  position:relative;
-  transform-style:preserve-3d;
-  animation:floatPhone 8s ease-in-out infinite;
-}
-@keyframes floatPhone{
-  0%,100%{transform:translateY(0) rotateX(3deg) rotateY(-3deg)}
-  50%{transform:translateY(-6px) rotateX(5deg) rotateY(-5deg)}
-}
-
-/* BODY */
-.body{
-  position:absolute;
-  inset:0;
-  border-radius:34px;
-  background:#020617;
-  box-shadow:
-    0 60px 120px rgba(0,0,0,.8),
-    inset 0 0 0 1.5px #334155;
-}
-.body::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:36px;
-  background:linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(56,189,248,.45) 50%,
-    transparent 100%
-  );
-  opacity:.35;
-  animation:rimMove 6s ease-in-out infinite;
-}
-@keyframes rimMove{
-  0%,100%{transform:translateY(-18px)}
-  50%{transform:translateY(18px)}
-}
-
-/* SCREEN */
-.screen{
-  position:absolute;
-  inset:10px;
-  border-radius:26px;
-  overflow:hidden;
-}
-
-/* BRAND */
-.branding{
-  position:absolute;
-  top:6px;
-  right:6px;
-  font-size:10px;
-  font-weight:700;
-  color:#fff;
-  opacity:.75;
-  z-index:50;
-}
-
-/* HOOK */
-.hook-svg{
-  position:absolute;
-  top:22px;
-  width:100%;
-  height:48px;
-  z-index:40;
-}
-.hook-text{
-  font-size:13px;
-  fill:#38bdf8;
-  font-weight:700;
-  letter-spacing:1.2px;
-}
-
-.hook-subtitle{
-  position:absolute;
-  top:64px;
-  width:100%;
-  text-align:center;
-  color:#e5e7eb;
-  font-size:.8em;
-  font-weight:600;
-  opacity:.9;
-}
-
-/* RATIONALE */
-.rationale{
-  position:absolute;
-  top:104px;
-  width:90%;
-  left:5%;
-  opacity:0;
-  transform:translateY(14px) scale(.92);
-  transition:all .8s cubic-bezier(.22,.9,.22,1);
-  z-index:30;
-}
-.rationale.show{
-  opacity:1;
-  transform:translateY(0) scale(1);
-  animation:floatRationale 6s ease-in-out infinite;
-}
-@keyframes floatRationale{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-.rationale img{width:100%;height:auto}
-
-/* CASCADE */
-.cascade-container{
-  position:absolute;
-  top:180px;
-  width:100%;
-  height:240px;
-  pointer-events:none;
-  z-index:20;
-}
-.cascade-container img{
-  position:absolute;
-  width:80%;
-  left:10%;
-  opacity:0;
-  transform:translateY(40px) scale(.94);
-  transition:all .7s cubic-bezier(.22,.9,.22,1);
-}
-
-/* QUIZ */
-.quiz-text{
-  position:absolute;
-  bottom:14px;
-  width:90%;
-  left:5%;
-  color:#fff;
-  font-weight:700;
-  text-align:center;
-  opacity:0;
-  transition:opacity .6s ease;
-  z-index:40;
-}
+body{margin:0;height:100vh;background:#020617;display:flex;justify-content:center;align-items:center;font-family:system-ui,-apple-system,Segoe UI;overflow:hidden;}
+.phone{width:230px;height:460px;position:relative;transform-style:preserve-3d;animation:floatPhone 8s ease-in-out infinite;}
+@keyframes floatPhone{0%,100%{transform:translateY(0) rotateX(3deg) rotateY(-3deg)}50%{transform:translateY(-6px) rotateX(5deg) rotateY(-5deg)}}
+.body{position:absolute;inset:0;border-radius:34px;background:#020617;box-shadow:0 60px 120px rgba(0,0,0,.8),inset 0 0 0 1.5px #334155;}
+.body::before{content:"";position:absolute;inset:-2px;border-radius:36px;background:linear-gradient(180deg,transparent 0%,rgba(56,189,248,.45) 50%,transparent 100%);opacity:.35;animation:rimMove 6s ease-in-out infinite;}
+@keyframes rimMove{0%,100%{transform:translateY(-18px)}50%{transform:translateY(18px)}}
+.screen{position:absolute;inset:10px;border-radius:26px;overflow:hidden;}
+.branding{position:absolute;top:6px;right:6px;font-size:10px;font-weight:700;color:#fff;opacity:.75;z-index:50;}
+.hook-svg{position:absolute;top:22px;width:100%;height:48px;z-index:40;}
+.hook-text{font-size:13px;fill:#38bdf8;font-weight:700;letter-spacing:1.2px;}
+.hook-subtitle{position:absolute;top:64px;width:100%;text-align:center;color:#e5e7eb;font-size:.8em;font-weight:600;opacity:.9;}
+.rationale{position:absolute;top:104px;width:90%;left:5%;opacity:0;transform:translateY(14px) scale(.92);transition:all .8s cubic-bezier(.22,.9,.22,1);z-index:30;}
+.rationale.show{opacity:1;transform:translateY(0) scale(1);animation:floatRationale 6s ease-in-out infinite;}
+.rationale img{width:100%;height:auto;object-fit:contain;}
+@keyframes floatRationale{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1)}}
+.cascade-container{position:absolute;top:180px;width:100%;height:240px;pointer-events:none;z-index:20;}
+.cascade-container img{position:absolute;width:80%;left:10%;opacity:0;transform:translateY(40px) scale(.94);transition:all .7s cubic-bezier(.22,.9,.22,1);}
+.quiz-text{position:absolute;bottom:14px;width:90%;left:5%;color:#fff;font-weight:700;text-align:center;opacity:0;transition:opacity .6s ease;z-index:40;}
 .quiz-text.show{opacity:1}
-
-/* WORD FLY */
-.word-fly-container{position:absolute;inset:0;pointer-events:none;z-index:60}
-.word-fly{
-  position:absolute;
-  font-weight:700;
-  color:#fff;
-  transition:transform 1.2s cubic-bezier(.22,.9,.22,1),opacity 1s ease;
-}
+.word-fly-container{position:absolute;inset:0;pointer-events:none;z-index:60;}
+.word-fly{position:absolute;font-weight:700;color:#fff;transition:transform 1.2s cubic-bezier(.22,.9,.22,1),opacity 1s ease;}
 .word-fly.out{opacity:0}
+/* ===== CTA ===== */
+.cta{position:absolute;bottom:30px;width:100%;text-align:center;color:#38bdf8;font-size:14px;font-weight:700;opacity:0;animation:ctaFade 2s ease 13s forwards;z-index:70;}
+@keyframes ctaFade{0%{opacity:0}50%{opacity:1}100%{opacity:1}}
 </style>
 </head>
-
 <body>
 <div class="phone">
   <div class="body"></div>
   <div class="screen">
-
     <div class="branding">ETK Yogya</div>
-
     <svg class="hook-svg" viewBox="0 0 230 50">
-      <defs>
-        <path id="arc" d="M12,40 A110,32 0 0,1 218,40"/>
-      </defs>
-      <text class="hook-text">
-        <textPath href="#arc" startOffset="50%" text-anchor="middle">
-          ...CBTLearning|Paham|SNBT'26...
-        </textPath>
-      </text>
+      <defs><path id="arc" d="M12,40 A110,32 0 0,1 218,40"/></defs>
+      <text class="hook-text"><textPath href="#arc" startOffset="50%" text-anchor="middle">...CBTLearning|Paham|SNBT'26...</textPath></text>
     </svg>
-
     <div class="hook-subtitle">•Rationale Generator•</div>
-
-    <div class="rationale" id="rationale">
-      <img id="image">
-    </div>
-
+    <div class="rationale" id="rationale"><img id="image"></div>
     <div class="cascade-container" id="cascade"></div>
-
-    <div class="quiz-text" id="quizText"
-      data-text="•SNBT•BAHAS|TUNTAS| Jika 3x + 5 = 20, maka nilai x adalah">
-    </div>
-
+    <div class="quiz-text" id="quizText" data-text="•SNBT•BAHAS|TUNTAS| Jika 3x + 5 = 20, maka nilai x adalah"></div>
     <div class="word-fly-container" id="fly"></div>
+    <div class="cta">Belajar SNBT 2026? Yuk mulai sekarang!</div>
   </div>
 </div>
-
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/06/19/audio_17b4e5aa1f.mp3?filename=calm-study-ambient-128.mp3" type="audio/mpeg">
+</audio>
 <script>
-/* SEEDED RANDOM (ANTI LOOP BREAK) */
-let seed=1;
-function rnd(){
-  const x=Math.sin(seed++)*10000;
-  return x-Math.floor(x);
-}
-
-const images=[
- "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
- "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
- "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
-];
-
+const images=["https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg","https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg","https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"];
 const rationale=document.getElementById("rationale");
 const image=document.getElementById("image");
 const quiz=document.getElementById("quizText");
 const cascade=document.getElementById("cascade");
 const fly=document.getElementById("fly");
-
-let idx=0;
-const LOOP=10000;
-
-/* preload */
+let idx=0;const DURATION=5200;
 images.forEach(s=>{const i=new Image();i.src=s});
-
-/* split */
-function split(){
-  quiz.innerHTML=quiz.dataset.text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
-}
-
-/* fly */
-function flyWords(){
-  fly.innerHTML="";
-  const p=fly.getBoundingClientRect();
-  quiz.querySelectorAll("span").forEach((s,i)=>{
-    const r=s.getBoundingClientRect();
-    const c=s.cloneNode(true);
-    c.className="word-fly";
-    c.style.left=r.left-p.left+"px";
-    c.style.top=r.top-p.top+"px";
-    fly.appendChild(c);
-    setTimeout(()=>{
-      const a=rnd()*Math.PI*2;
-      c.style.transform=`translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
-      c.classList.add("out");
-    },i*120);
-    setTimeout(()=>c.remove(),1600);
-  });
-}
-
-/* cascade */
-function showCascade(){
-  cascade.innerHTML="";
-  images.forEach((src,i)=>{
-    const img=document.createElement("img");
-    img.src=src;
-    cascade.appendChild(img);
-    setTimeout(()=>{
-      img.style.opacity=1;
-      img.style.transform=`translateY(${i*14}px) scale(1)`;
-    },i*260);
-  });
-}
-
-/* loop */
-function run(){
-  seed=1;
-  fly.innerHTML="";
-  cascade.innerHTML="";
-  quiz.innerHTML=quiz.dataset.text;
-
-  image.src=images[idx++%images.length];
-  rationale.classList.remove("show");
-  quiz.classList.remove("show");
-
-  setTimeout(()=>rationale.classList.add("show"),300);
-  setTimeout(()=>{
-    quiz.classList.add("show");
-    split(); flyWords();
-  },1000);
-  setTimeout(()=>{
-    rationale.classList.remove("show");
-    quiz.classList.remove("show");
-    showCascade();
-  },6500);
-}
-
-run();
-setInterval(run,LOOP);
+function split(){quiz.innerHTML=quiz.dataset.text.split(" ").map(w=>`<span>${w}</span>`).join(" "); }
+function flyWords(){fly.innerHTML="";const p=fly.getBoundingClientRect();quiz.querySelectorAll("span").forEach((s,i)=>{const r=s.getBoundingClientRect();const c=s.cloneNode(true);c.className="word-fly";c.style.left=r.left-p.left+"px";c.style.top=r.top-p.top+"px";fly.appendChild(c);setTimeout(()=>{const a=Math.random()*Math.PI*2;c.style.transform=`translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;c.classList.add("out");},i*120);setTimeout(()=>c.remove(),1600);});}
+function showCascade(){cascade.innerHTML="";images.forEach((src,i)=>{const img=document.createElement("img");img.src=src;img.style.zIndex=10+i;cascade.appendChild(img);setTimeout(()=>{img.style.opacity=1;img.style.transform=`translateY(${i*14}px) scale(1)`;},i*260);setTimeout(()=>img.remove(),DURATION);});}
+function show(){image.src=images[idx%images.length];idx++;rationale.classList.remove("show");quiz.classList.remove("show");quiz.innerHTML=quiz.dataset.text;image.onload=()=>{setTimeout(()=>rationale.classList.add("show"),200);setTimeout(()=>{quiz.classList.add("show");split();flyWords();},900);setTimeout(()=>{rationale.classList.remove("show");quiz.classList.remove("show");showCascade();},DURATION-1000);};setTimeout(show,DURATION+1400);}
+show();
 </script>
 </body>
 </html>
