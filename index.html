@@ -1,5 +1,22 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SNBT Mockup – Render Mode Final</title>
+
+<script>
+  const RENDER_MODE = true;
+</script>
+
 <style>
-/* ===== GLOBAL ===== */
+*{
+  box-sizing:border-box;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  backface-visibility:hidden;
+  will-change:transform,opacity;
+}
 body{
   margin:0;
   height:100vh;
@@ -9,52 +26,19 @@ body{
   align-items:center;
   font-family:system-ui,-apple-system,Segoe UI;
   overflow:hidden;
-  perspective:1200px;
 }
 
-/* ===== PHONE ===== */
+/* ===== PHONE 3D ===== */
 .phone{
   width:230px;
   height:460px;
   position:relative;
   transform-style:preserve-3d;
-  animation:
-    floatPhone 8s ease-in-out infinite,
-    phoneColorShift 9s ease-in-out infinite;
+  animation:floatPhone 12s ease-in-out infinite;
 }
-
-/* FLOAT */
 @keyframes floatPhone{
-  0%,100%{
-    transform:
-      translateY(0)
-      rotateX(3deg)
-      rotateY(-3deg)
-      translateZ(10px);
-  }
-  50%{
-    transform:
-      translateY(-6px)
-      rotateX(6deg)
-      rotateY(-6deg)
-      translateZ(18px);
-  }
-}
-
-/* ===== COLOR SHIFT (SAFE) ===== */
-@keyframes phoneColorShift{
-  0%,100%{
-    --rim:#38bdf8;
-    --glow:rgba(56,189,248,.35);
-  }
-  33%{
-    --rim:#facc15; /* GOLD */
-    --glow:rgba(250,204,21,.28);
-  }
-  66%{
-    --rim:#be123c; /* MERAH HATI */
-    --glow:rgba(190,18,60,.25);
-  }
+  0%,100%{transform:translateY(0) rotateX(3deg) rotateY(-3deg)}
+  50%{transform:translateY(-6px) rotateX(5deg) rotateY(-5deg)}
 }
 
 /* ===== BODY ===== */
@@ -64,30 +48,23 @@ body{
   border-radius:34px;
   background:#020617;
   box-shadow:
-    0 70px 140px rgba(0,0,0,.85),
-    0 0 40px var(--glow),
+    0 60px 120px rgba(0,0,0,.8),
     inset 0 0 0 1.5px #334155;
-  transform:translateZ(6px);
 }
-
-/* RIM LIGHT */
 .body::before{
   content:"";
   position:absolute;
   inset:-2px;
   border-radius:36px;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      var(--rim) 50%,
-      transparent 100%
-    );
-  opacity:.35;
-  animation:rimMove 6s ease-in-out infinite;
-  filter:blur(.3px);
+  background:linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(56,189,248,.35) 50%,
+    transparent 100%
+  );
+  opacity:.25;
+  animation:rimMove 10s ease-in-out infinite;
 }
-
 @keyframes rimMove{
   0%,100%{transform:translateY(-18px)}
   50%{transform:translateY(18px)}
@@ -99,7 +76,6 @@ body{
   inset:10px;
   border-radius:26px;
   overflow:hidden;
-  transform:translateZ(12px);
 }
 
 /* ===== BRAND ===== */
@@ -148,25 +124,18 @@ body{
   width:90%;
   left:5%;
   opacity:0;
-  transform:
-    translateY(14px)
-    scale(.92)
-    translateZ(14px);
+  transform:translateY(14px) scale(.94);
   transition:all .8s cubic-bezier(.22,.9,.22,1);
   z-index:30;
 }
 .rationale.show{
   opacity:1;
-  transform:
-    translateY(0)
-    scale(1)
-    translateZ(18px);
-  animation:floatRationale 6s ease-in-out infinite;
+  transform:translateY(0) scale(1);
 }
-
-@keyframes floatRationale{
-  0%,100%{transform:translateY(0) translateZ(18px)}
-  50%{transform:translateY(-6px) translateZ(22px)}
+.rationale img{
+  width:100%;
+  height:auto;
+  object-fit:contain;
 }
 
 /* ===== CASCADE ===== */
@@ -183,10 +152,7 @@ body{
   width:80%;
   left:10%;
   opacity:0;
-  transform:
-    translateY(40px)
-    scale(.94)
-    translateZ(8px);
+  transform:translateY(40px) scale(.94);
   transition:all .7s cubic-bezier(.22,.9,.22,1);
 }
 
@@ -222,3 +188,131 @@ body{
 }
 .word-fly.out{opacity:0}
 </style>
+</head>
+
+<body>
+<div class="phone">
+  <div class="body"></div>
+  <div class="screen">
+
+    <div class="branding">ETK Yogya</div>
+
+    <svg class="hook-svg" viewBox="0 0 230 50">
+      <defs>
+        <path id="arc" d="M12,40 A110,32 0 0,1 218,40"/>
+      </defs>
+      <text class="hook-text">
+        <textPath href="#arc" startOffset="50%" text-anchor="middle">
+          CBTLearning • Paham • SNBT 2026
+        </textPath>
+      </text>
+    </svg>
+
+    <div class="hook-subtitle">Rationale Generator</div>
+
+    <div class="rationale" id="rationale">
+      <img id="image">
+    </div>
+
+    <div class="cascade-container" id="cascade"></div>
+
+    <div class="quiz-text" id="quizText"
+      data-text="Jika 3x + 5 = 20, maka nilai x adalah">
+    </div>
+
+    <div class="word-fly-container" id="fly"></div>
+
+  </div>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const FPS = 30;
+const TOTAL_FRAMES = 300; // 10 detik
+let frame = 0;
+
+const images=[
+ "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
+ "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
+ "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+];
+
+const rationale=document.getElementById("rationale");
+const image=document.getElementById("image");
+const quiz=document.getElementById("quizText");
+const cascade=document.getElementById("cascade");
+const fly=document.getElementById("fly");
+
+let idx=0;
+
+/* preload */
+images.forEach(s=>{const i=new Image();i.src=s});
+
+/* split quiz */
+function split(){
+  quiz.innerHTML=quiz.dataset.text.split(" ")
+    .map(w=>`<span>${w}</span>`).join(" ");
+}
+
+/* deterministic fly */
+const angles=[0,.8,1.6,2.4,3.2,4];
+function flyWords(){
+  fly.innerHTML="";
+  const p=fly.getBoundingClientRect();
+  quiz.querySelectorAll("span").forEach((s,i)=>{
+    const r=s.getBoundingClientRect();
+    const c=s.cloneNode(true);
+    c.className="word-fly";
+    c.style.left=r.left-p.left+"px";
+    c.style.top =r.top -p.top +"px";
+    fly.appendChild(c);
+    const a=angles[i%angles.length];
+    c.style.transform=
+      `translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
+    c.classList.add("out");
+  });
+}
+
+/* cascade */
+function showCascade(){
+  cascade.innerHTML="";
+  images.forEach((src,i)=>{
+    const img=document.createElement("img");
+    img.src=src;
+    img.style.zIndex=10+i;
+    cascade.appendChild(img);
+    img.style.opacity=1;
+    img.style.transform=`translateY(${i*14}px) scale(1)`;
+  });
+}
+
+/* timeline */
+function renderLoop(){
+  if(frame===0){
+    image.src=images[idx%images.length];
+    idx++;
+    rationale.classList.add("show");
+  }
+
+  if(frame===45){
+    quiz.classList.add("show");
+    split();
+    flyWords();
+  }
+
+  if(frame===210){
+    rationale.classList.remove("show");
+    quiz.classList.remove("show");
+    showCascade();
+  }
+
+  frame++;
+  if(frame<TOTAL_FRAMES){
+    requestAnimationFrame(renderLoop);
+  }
+}
+
+renderLoop();
+</script>
+</body>
+</html>
