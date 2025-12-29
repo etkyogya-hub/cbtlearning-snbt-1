@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CBTLearning SNBT – TikTok Ready</title>
+<title>CBTLearning SNBT – TikTok FYP Ready</title>
 
 <style>
 body{
@@ -211,44 +211,49 @@ body{
 
     <div class="cascade-container" id="cascade"></div>
 
-    <div class="quiz-text" id="quizText"
-      data-text="•SNBT•BAHAS|TUNTAS| Jika 3x + 5 = 20, maka nilai x adalah">
-    </div>
-
+    <div class="quiz-text" id="quizText"></div>
     <div class="word-fly-container" id="fly"></div>
   </div>
 </div>
 
 <script>
-const images=[
-  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
-  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
-  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+const content = [
+  {
+    question: "Jika 3x + 5 = 20, maka nilai x adalah",
+    rationale: "Kurangi 5 dari kedua sisi: 3x=15, bagi 3 → x=5",
+    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg"
+  },
+  {
+    question: "Jika y/2 - 4 = 6, maka nilai y adalah",
+    rationale: "Tambahkan 4: y/2=10, kali 2 → y=20",
+    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg"
+  },
+  {
+    question: "Jika 2a + 3 = 11, maka a=?",
+    rationale: "Kurangi 3: 2a=8, bagi 2 → a=4",
+    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+  }
 ];
 
-const rationale=document.getElementById("rationale");
-const image=document.getElementById("image");
-const quiz=document.getElementById("quizText");
-const cascade=document.getElementById("cascade");
-const fly=document.getElementById("fly");
+const rationaleEl = document.getElementById("rationale");
+const imageEl = document.getElementById("image");
+const quizEl = document.getElementById("quizText");
+const cascade = document.getElementById("cascade");
+const fly = document.getElementById("fly");
 
-let idx=0;
-const DURATION=5200;
+let idx = 0;
+const DURATION = 5200;
 
-/* preload */
-images.forEach(s=>{const i=new Image();i.src=s});
-
-/* split words */
-function split(){
-  quiz.innerHTML=quiz.dataset.text.split(" ")
-    .map(w=>`<span>${w}</span>`).join(" ");
+/* split words for fly animation */
+function split(text){
+  quizEl.innerHTML = text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
 }
 
-/* fly words */
+/* fly words animation */
 function flyWords(){
   fly.innerHTML="";
   const p=fly.getBoundingClientRect();
-  quiz.querySelectorAll("span").forEach((s,i)=>{
+  quizEl.querySelectorAll("span").forEach((s,i)=>{
     const r=s.getBoundingClientRect();
     const c=s.cloneNode(true);
     c.className="word-fly";
@@ -257,21 +262,20 @@ function flyWords(){
     fly.appendChild(c);
     setTimeout(()=>{
       const a=Math.random()*Math.PI*2;
-      c.style.transform=
-        `translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
+      c.style.transform=`translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
       c.classList.add("out");
     },i*120);
     setTimeout(()=>c.remove(),1600);
   });
 }
 
-/* cascade */
+/* cascade images */
 function showCascade(){
   cascade.innerHTML="";
-  images.forEach((src,i)=>{
-    const img=document.createElement("img");
-    img.src=src;
-    img.style.zIndex=10+i;
+  content.forEach((c,i)=>{
+    const img = document.createElement("img");
+    img.src = c.image;
+    img.style.zIndex = 10+i;
     cascade.appendChild(img);
     setTimeout(()=>{
       img.style.opacity=1;
@@ -283,28 +287,31 @@ function showCascade(){
 
 /* main loop */
 function show(){
-  image.src=images[idx%images.length];
+  const c = content[idx % content.length];
   idx++;
-  rationale.classList.remove("show");
-  quiz.classList.remove("show");
-  quiz.innerHTML=quiz.dataset.text;
 
-  image.onload=()=>{
-    setTimeout(()=>rationale.classList.add("show"),200);
+  rationaleEl.classList.remove("show");
+  quizEl.classList.remove("show");
+  quizEl.innerHTML = "";
+
+  imageEl.src = c.image;
+  imageEl.onload = ()=>{
+    setTimeout(()=>rationaleEl.classList.add("show"),200);
     setTimeout(()=>{
-      quiz.classList.add("show");
-      split();
+      quizEl.classList.add("show");
+      split(c.question);
       flyWords();
     },900);
     setTimeout(()=>{
-      rationale.classList.remove("show");
-      quiz.classList.remove("show");
+      rationaleEl.classList.remove("show");
+      quizEl.classList.remove("show");
       showCascade();
     },DURATION-1000);
   };
 
   setTimeout(show,DURATION+1400);
 }
+
 show();
 </script>
 </body>
