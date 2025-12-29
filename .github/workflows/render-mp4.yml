@@ -29,31 +29,41 @@ jobs:
         node << 'EOF'
         const puppeteer = require("puppeteer");
 
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
         (async () => {
           const browser = await puppeteer.launch({
             headless: "new",
-            args: ["--no-sandbox"]
+            args: [
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+              "--disable-dev-shm-usage",
+              "--disable-gpu"
+            ]
           });
 
           const page = await browser.newPage();
+
           await page.setViewport({
             width: 1080,
             height: 1920,
             deviceScaleFactor: 2
           });
 
-          await page.goto("file://" + process.cwd() + "/index.html", {
-            waitUntil: "networkidle0"
-          });
+          await page.goto(
+            "file://" + process.cwd() + "/index.html",
+            { waitUntil: "networkidle0" }
+          );
 
-          await page.waitForTimeout(1000);
+          // beri waktu animasi awal jalan
+          await sleep(1000);
 
           const frames = 300; // 10 detik @30fps
           for (let i = 0; i < frames; i++) {
             await page.screenshot({
-              path: `frames/frame_${String(i).padStart(4,"0")}.png`
+              path: `frames/frame_${String(i).padStart(4, "0")}.png`
             });
-            await page.waitForTimeout(33);
+            await sleep(33); // ~30fps
           }
 
           await browser.close();
@@ -62,9 +72,10 @@ jobs:
 
     - name: Convert frames to MP4
       run: |
-        ffmpeg -framerate 30 -i frames/frame_%04d.png \
-        -c:v libx264 -pix_fmt yuv420p \
-        -movflags +faststart output.mp4
+        ffmpeg -y -framerate 30 -i frames/frame_%04d.png \
+        -c:v libx264 -profile:v high -level 4.2 \
+        -pix_fmt yuv420p -movflags +faststart \
+        output.mp4
 
     - name: Upload MP4
       uses: actions/upload-artifact@v4
