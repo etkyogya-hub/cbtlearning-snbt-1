@@ -3,20 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SNBT Mockup – Render Mode Final</title>
-
-<script>
-  const RENDER_MODE = true;
-</script>
+<title>SNBT Mockup – Elegant Cascade</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-  backface-visibility:hidden;
-  will-change:transform,opacity;
-}
 body{
   margin:0;
   height:100vh;
@@ -28,13 +17,13 @@ body{
   overflow:hidden;
 }
 
-/* ===== PHONE 3D ===== */
+/* ===== PHONE ===== */
 .phone{
   width:230px;
   height:460px;
   position:relative;
   transform-style:preserve-3d;
-  animation:floatPhone 12s ease-in-out infinite;
+  animation:floatPhone 8s ease-in-out infinite;
 }
 @keyframes floatPhone{
   0%,100%{transform:translateY(0) rotateX(3deg) rotateY(-3deg)}
@@ -59,11 +48,11 @@ body{
   background:linear-gradient(
     180deg,
     transparent 0%,
-    rgba(56,189,248,.35) 50%,
+    rgba(56,189,248,.45) 50%,
     transparent 100%
   );
-  opacity:.25;
-  animation:rimMove 10s ease-in-out infinite;
+  opacity:.35;
+  animation:rimMove 6s ease-in-out infinite;
 }
 @keyframes rimMove{
   0%,100%{transform:translateY(-18px)}
@@ -124,18 +113,23 @@ body{
   width:90%;
   left:5%;
   opacity:0;
-  transform:translateY(14px) scale(.94);
+  transform:translateY(14px) scale(.92);
   transition:all .8s cubic-bezier(.22,.9,.22,1);
   z-index:30;
 }
 .rationale.show{
   opacity:1;
   transform:translateY(0) scale(1);
+  animation:floatRationale 6s ease-in-out infinite;
 }
 .rationale img{
   width:100%;
   height:auto;
   object-fit:contain;
+}
+@keyframes floatRationale{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1)}
 }
 
 /* ===== CASCADE ===== */
@@ -197,18 +191,19 @@ body{
 
     <div class="branding">ETK Yogya</div>
 
+    <!-- Curved Hook -->
     <svg class="hook-svg" viewBox="0 0 230 50">
       <defs>
         <path id="arc" d="M12,40 A110,32 0 0,1 218,40"/>
       </defs>
       <text class="hook-text">
         <textPath href="#arc" startOffset="50%" text-anchor="middle">
-          CBTLearning • Paham • SNBT 2026
+          ...CBTLearning|Paham|SNBT'26...
         </textPath>
       </text>
     </svg>
 
-    <div class="hook-subtitle">Rationale Generator</div>
+    <div class="hook-subtitle">•Rationale Generator•</div>
 
     <div class="rationale" id="rationale">
       <img id="image">
@@ -217,20 +212,14 @@ body{
     <div class="cascade-container" id="cascade"></div>
 
     <div class="quiz-text" id="quizText"
-      data-text="Jika 3x + 5 = 20, maka nilai x adalah">
+      data-text="•SNBT•BAHAS|TUNTAS| Jika 3x + 5 = 20, maka nilai x adalah">
     </div>
 
     <div class="word-fly-container" id="fly"></div>
-
   </div>
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-const FPS = 30;
-const TOTAL_FRAMES = 300; // 10 detik
-let frame = 0;
-
 const images=[
  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
@@ -244,18 +233,18 @@ const cascade=document.getElementById("cascade");
 const fly=document.getElementById("fly");
 
 let idx=0;
+const DURATION=5200;
 
 /* preload */
 images.forEach(s=>{const i=new Image();i.src=s});
 
-/* split quiz */
+/* split words */
 function split(){
   quiz.innerHTML=quiz.dataset.text.split(" ")
     .map(w=>`<span>${w}</span>`).join(" ");
 }
 
-/* deterministic fly */
-const angles=[0,.8,1.6,2.4,3.2,4];
+/* fly words */
 function flyWords(){
   fly.innerHTML="";
   const p=fly.getBoundingClientRect();
@@ -266,10 +255,13 @@ function flyWords(){
     c.style.left=r.left-p.left+"px";
     c.style.top =r.top -p.top +"px";
     fly.appendChild(c);
-    const a=angles[i%angles.length];
-    c.style.transform=
-      `translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
-    c.classList.add("out");
+    setTimeout(()=>{
+      const a=Math.random()*Math.PI*2;
+      c.style.transform=
+        `translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
+      c.classList.add("out");
+    },i*120);
+    setTimeout(()=>c.remove(),1600);
   });
 }
 
@@ -281,38 +273,39 @@ function showCascade(){
     img.src=src;
     img.style.zIndex=10+i;
     cascade.appendChild(img);
-    img.style.opacity=1;
-    img.style.transform=`translateY(${i*14}px) scale(1)`;
+    setTimeout(()=>{
+      img.style.opacity=1;
+      img.style.transform=`translateY(${i*14}px) scale(1)`;
+    },i*260);
+    setTimeout(()=>img.remove(),DURATION);
   });
 }
 
-/* timeline */
-function renderLoop(){
-  if(frame===0){
-    image.src=images[idx%images.length];
-    idx++;
-    rationale.classList.add("show");
-  }
+/* main loop */
+function show(){
+  image.src=images[idx%images.length];
+  idx++;
+  rationale.classList.remove("show");
+  quiz.classList.remove("show");
+  quiz.innerHTML=quiz.dataset.text;
 
-  if(frame===45){
-    quiz.classList.add("show");
-    split();
-    flyWords();
-  }
+  image.onload=()=>{
+    setTimeout(()=>rationale.classList.add("show"),200);
+    setTimeout(()=>{
+      quiz.classList.add("show");
+      split();
+      flyWords();
+    },900);
+    setTimeout(()=>{
+      rationale.classList.remove("show");
+      quiz.classList.remove("show");
+      showCascade();
+    },DURATION-1000);
+  };
 
-  if(frame===210){
-    rationale.classList.remove("show");
-    quiz.classList.remove("show");
-    showCascade();
-  }
-
-  frame++;
-  if(frame<TOTAL_FRAMES){
-    requestAnimationFrame(renderLoop);
-  }
+  setTimeout(show,DURATION+1400);
 }
-
-renderLoop();
+show();
 </script>
 </body>
 </html>
