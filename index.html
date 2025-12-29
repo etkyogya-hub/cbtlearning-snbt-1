@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CBTLearning SNBT – TikTok FYP Ready</title>
-
+<title>CBTLearning SNBT – TikTok Series</title>
 <style>
 body{
   margin:0;
@@ -23,11 +22,11 @@ body{
   height:460px;
   position:relative;
   transform-style:preserve-3d;
-  animation:floatPhone 6s ease-in-out infinite;
+  animation:floatPhone 8s ease-in-out infinite;
 }
 @keyframes floatPhone{
   0%,100%{transform:translateY(0) rotateX(3deg) rotateY(-3deg)}
-  50%{transform:translateY(-5px) rotateX(5deg) rotateY(-5deg)}
+  50%{transform:translateY(-6px) rotateX(5deg) rotateY(-5deg)}
 }
 
 /* ===== BODY ===== */
@@ -120,7 +119,7 @@ body{
 .rationale.show{
   opacity:1;
   transform:translateY(0) scale(1);
-  animation:floatRationale 4s ease-in-out infinite;
+  animation:floatRationale 6s ease-in-out infinite;
 }
 .rationale img{
   width:100%;
@@ -181,9 +180,23 @@ body{
     opacity 1s ease;
 }
 .word-fly.out{opacity:0}
+
+/* ===== CTA ===== */
+.cta-text{
+  position:absolute;
+  bottom:0px;
+  width:100%;
+  text-align:center;
+  font-weight:700;
+  font-size:12px;
+  color:#facc15;
+  opacity:0;
+  transition:opacity 0.5s ease;
+  z-index:70;
+}
+.cta-text.show{opacity:1}
 </style>
 </head>
-
 <body>
 <div class="phone">
   <div class="body"></div>
@@ -198,7 +211,7 @@ body{
       </defs>
       <text class="hook-text">
         <textPath href="#arc" startOffset="50%" text-anchor="middle">
-          ...CBTLearning | Paham SNBT'26...
+          ...CBTLearning|Paham|SNBT'26...
         </textPath>
       </text>
     </svg>
@@ -212,71 +225,115 @@ body{
     <div class="cascade-container" id="cascade"></div>
 
     <div class="quiz-text" id="quizText"></div>
+
     <div class="word-fly-container" id="fly"></div>
+
+    <div class="cta-text" id="cta"></div>
   </div>
 </div>
 
 <script>
-const content = [
+const content=[
   {
-    question: "Jika 3x + 5 = 20, maka nilai x adalah",
-    rationale: "Kurangi 5 dari kedua sisi: 3x=15, bagi 3 → x=5",
-    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg"
+    quiz:"Jika 3x + 5 = 20, maka x=?",
+    rationale:"Kurangi 5 → 3x=15 → x=5",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg"
+    ],
+    cta:"Tonton seri selanjutnya untuk trik SNBT!"
   },
   {
-    question: "Jika y/2 - 4 = 6, maka nilai y adalah",
-    rationale: "Tambahkan 4: y/2=10, kali 2 → y=20",
-    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg"
+    quiz:"y/2 - 4 = 6, y=?",
+    rationale:"Tambah 4 → y/2=10 → y=20",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg"
+    ],
+    cta:"Seri #3 lihat tips main cepat!"
   },
   {
-    question: "Jika 2a + 3 = 11, maka a=?",
-    rationale: "Kurangi 3: 2a=8, bagi 2 → a=4",
-    image: "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+    quiz:"2a + 3 = 11, a=?",
+    rationale:"Kurangi 3 → 2a=8 → a=4",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+    ],
+    cta:"Jangan skip soal sederhana!"
+  },
+  {
+    quiz:"5b - 10 = 15, b=?",
+    rationale:"Tambah 10 → 5b=25 → b=5",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz1.jpg"
+    ],
+    cta:"Tonton trik selanjutnya!"
+  },
+  {
+    quiz:"3c + 6 = 18, c=?",
+    rationale:"Kurangi 6 → 3c=12 → c=4",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Quiz2.jpg"
+    ],
+    cta:"Pahami sistem, bukan menghafal!"
+  },
+  {
+    quiz:"7d - 14 = 21, d=?",
+    rationale:"Tambah 14 → 7d=35 → d=5",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz5.jpg"
+    ],
+    cta:"Trik #7 jangan sampai ketinggalan!"
+  },
+  {
+    quiz:"Recap 3 soal pertama",
+    rationale:"x=5, y=20, a=4",
+    images:[
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz1.jpg",
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
+      "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
+    ],
+    cta:"Like & Follow untuk tips lengkap CBTLearning!"
   }
 ];
 
-const rationaleEl = document.getElementById("rationale");
-const imageEl = document.getElementById("image");
-const quizEl = document.getElementById("quizText");
-const cascade = document.getElementById("cascade");
-const fly = document.getElementById("fly");
+const rationaleEl=document.getElementById("rationale");
+const imageEl=document.getElementById("image");
+const quizEl=document.getElementById("quizText");
+const cascadeEl=document.getElementById("cascade");
+const flyEl=document.getElementById("fly");
+const ctaEl=document.getElementById("cta");
 
-let idx = 0;
-const DURATION = 5200;
+let idx=0;
+const DURATION=5200;
 
-/* split words for fly animation */
-function split(text){
-  quizEl.innerHTML = text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
+function splitWords(text){
+  return text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
 }
 
-/* fly words animation */
 function flyWords(){
-  fly.innerHTML="";
-  const p=fly.getBoundingClientRect();
+  flyEl.innerHTML="";
+  const p=flyEl.getBoundingClientRect();
   quizEl.querySelectorAll("span").forEach((s,i)=>{
     const r=s.getBoundingClientRect();
     const c=s.cloneNode(true);
     c.className="word-fly";
     c.style.left=r.left-p.left+"px";
-    c.style.top =r.top -p.top +"px";
-    fly.appendChild(c);
+    c.style.top=r.top-p.top+"px";
+    flyEl.appendChild(c);
     setTimeout(()=>{
       const a=Math.random()*Math.PI*2;
       c.style.transform=`translate(${Math.cos(a)*80}px,${Math.sin(a)*80}px) scale(1.8)`;
       c.classList.add("out");
     },i*120);
-    setTimeout(()=>c.remove(),1600);
+    setTimeout(()=>c.remove(),1800);
   });
 }
 
-/* cascade images */
-function showCascade(){
-  cascade.innerHTML="";
-  content.forEach((c,i)=>{
-    const img = document.createElement("img");
-    img.src = c.image;
-    img.style.zIndex = 10+i;
-    cascade.appendChild(img);
+function showCascade(images){
+  cascadeEl.innerHTML="";
+  images.forEach((src,i)=>{
+    const img=document.createElement("img");
+    img.src=src;
+    img.style.zIndex=10+i;
+    cascadeEl.appendChild(img);
     setTimeout(()=>{
       img.style.opacity=1;
       img.style.transform=`translateY(${i*14}px) scale(1)`;
@@ -285,30 +342,31 @@ function showCascade(){
   });
 }
 
-/* main loop */
 function show(){
-  const c = content[idx % content.length];
-  idx++;
-
+  const item=content[idx%content.length];
+  quizEl.innerHTML=item.quiz;
   rationaleEl.classList.remove("show");
   quizEl.classList.remove("show");
-  quizEl.innerHTML = "";
+  ctaEl.classList.remove("show");
+  imageEl.src=item.images[0];
 
-  imageEl.src = c.image;
-  imageEl.onload = ()=>{
+  imageEl.onload=()=>{
     setTimeout(()=>rationaleEl.classList.add("show"),200);
     setTimeout(()=>{
       quizEl.classList.add("show");
-      split(c.question);
+      quizEl.innerHTML=splitWords(item.quiz);
       flyWords();
     },900);
     setTimeout(()=>{
       rationaleEl.classList.remove("show");
       quizEl.classList.remove("show");
-      showCascade();
+      showCascade(item.images);
+      ctaEl.innerHTML=item.cta;
+      ctaEl.classList.add("show");
     },DURATION-1000);
   };
 
+  idx++;
   setTimeout(show,DURATION+1400);
 }
 
