@@ -1,4 +1,4 @@
-name: Render HTML to 4K MP4
+name: Render HTML to MP4
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
-    - name: Render frames in 4K vertical
+    - name: Render frames
       run: |
         mkdir frames
         node << 'EOF'
@@ -33,17 +33,27 @@ jobs:
         (async () => {
           const browser = await puppeteer.launch({
             headless: "new",
-            args: ["--no-sandbox","--disable-setuid-sandbox","--disable-dev-shm-usage","--disable-gpu"]
+            args: [
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+              "--disable-dev-shm-usage",
+              "--disable-gpu"
+            ]
           });
 
           const page = await browser.newPage();
           await page.setViewport({
-            width: 2160,
-            height: 3840,
+            width: 1080,
+            height: 1920,
             deviceScaleFactor: 2
           });
 
-          await page.goto("file://" + process.cwd() + "/index.html", { waitUntil: "networkidle0" });
+          await page.goto(
+            "file://" + process.cwd() + "/index.html",
+            { waitUntil: "networkidle0" }
+          );
+
+          // beri waktu animasi awal jalan
           await sleep(1000);
 
           const frames = 600; // 10 detik @60fps
@@ -58,17 +68,15 @@ jobs:
         })();
         EOF
 
-    - name: Convert frames to MP4 with audio
+    - name: Convert frames to MP4
       run: |
         ffmpeg -y -framerate 60 -i frames/frame_%04d.png \
-        -i https://cdn.pixabay.com/download/audio/2023/06/19/audio_17b4e5aa1f.mp3?filename=calm-study-ambient-128.mp3 \
-        -c:v libx264 -profile:v high -level 5.1 -pix_fmt yuv420p \
-        -c:a aac -b:a 192k -shortest \
-        -movflags +faststart \
-        output_4k.mp4
+        -c:v libx264 -profile:v high -level 4.2 \
+        -pix_fmt yuv420p -movflags +faststart \
+        output.mp4
 
     - name: Upload MP4
       uses: actions/upload-artifact@v4
       with:
-        name: tiktok-video-4k
-        path: output_4k.mp4
+        name: tiktok-video
+        path: output.mp4
