@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SNBT Cinematic Mockup – FINAL PRO</title>
+<title>SNBT Cinematic Mockup – FINAL PRO (FIXED)</title>
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,9 +47,11 @@ body{
   );
   background-size:100% 350%;
   animation:electricFlow 7s linear infinite;
+  animation-play-state:paused;
   mix-blend-mode:screen;
   opacity:.55;filter:blur(8px);
 }
+.body.active::after{animation-play-state:running}
 @keyframes electricFlow{
   from{background-position:50% 0%}
   to{background-position:50% 100%}
@@ -141,37 +143,35 @@ body{
 
 <body>
 <div class="safe-916">
+  <div class="phone">
+    <div class="body"></div>
 
-<div class="phone">
-  <div class="body"></div>
+    <div class="screen">
+      <div class="branding">ETK Yogya</div>
 
-  <div class="screen">
-    <div class="branding">ETK Yogya</div>
-
-    <div class="hook-container">
-      <div class="hook-line big" id="hookLine1">
-        CBTLearning Mudah Pahami Soal SNBT 2026
+      <div class="hook-container">
+        <div class="hook-line big" id="hookLine1">
+          CBTLearning Mudah Pahami Soal SNBT 2026
+        </div>
+        <div class="hook-line small" id="hookLine2">
+          Rationale Generator
+        </div>
       </div>
-      <div class="hook-line small" id="hookLine2">
-        Rationale Generator
+
+      <div class="rationale" id="rationale">
+        <img id="image" alt="">
       </div>
+
+      <div class="cascade-container" id="cascade"></div>
+
+      <div class="quiz-text" id="quizText"
+        data-text="Jika 3x + 5 = 20, maka nilai x adalah">
+      </div>
+
+      <div class="drop-flash" id="dropFlash"></div>
+      <div class="light-sweep" id="lightSweep"></div>
     </div>
-
-    <div class="rationale" id="rationale">
-      <img id="image">
-    </div>
-
-    <div class="cascade-container" id="cascade"></div>
-
-    <div class="quiz-text" id="quizText"
-      data-text="Jika 3x + 5 = 20, maka nilai x adalah">
-    </div>
-
-    <div class="drop-flash" id="dropFlash"></div>
-    <div class="light-sweep" id="lightSweep"></div>
   </div>
-</div>
-
 </div>
 
 <script>
@@ -184,6 +184,18 @@ const images = [
  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz2.jpg",
  "https://raw.githubusercontent.com/etkyogya-hub/cbtlearning-snbt-1/main/videos/assets/Qz3.jpg"
 ];
+
+/* ================= DOM REFS (FIX) ================= */
+const quizText   = document.getElementById("quizText");
+const rationale  = document.getElementById("rationale");
+const image      = document.getElementById("image");
+const cascadeEl  = document.getElementById("cascade");
+const dropFlash  = document.getElementById("dropFlash");
+const lightSweep = document.getElementById("lightSweep");
+const bodyEl     = document.querySelector(".body");
+
+/* ================= PRELOAD IMAGES ================= */
+images.forEach(src => { const i = new Image(); i.src = src; });
 
 /* ================= CAMERA FEEL ================= */
 let cam=0;
@@ -217,18 +229,18 @@ let cam=0;
   });
 })();
 
-/* ================= QUIZ WORD FLY ================= */
+/* ================= QUIZ WORD FLY (FIXED COORDS) ================= */
 function flyWords(){
-  const q=document.getElementById("quizText");
-  const text=q.dataset.text;
-  q.innerHTML=text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
-  q.querySelectorAll("span").forEach((s,i)=>{
+  const text=quizText.dataset.text;
+  quizText.innerHTML=text.split(" ").map(w=>`<span>${w}</span>`).join(" ");
+  const parent = quizText.getBoundingClientRect();
+  quizText.querySelectorAll("span").forEach((s,i)=>{
     const r=s.getBoundingClientRect();
     const f=s.cloneNode(true);
     f.className="word-fly";
-    f.style.left=r.left+"px";
-    f.style.top=r.top+"px";
-    document.body.appendChild(f);
+    f.style.left=(r.left-parent.left)+"px";
+    f.style.top =(r.top -parent.top )+"px";
+    quizText.appendChild(f);
     setTimeout(()=>{
       f.style.transform=
        `translate(${(Math.random()-.5)*120}px,
@@ -241,17 +253,16 @@ function flyWords(){
 
 /* ================= CASCADE ================= */
 function cascade(){
-  const c=document.getElementById("cascade");
-  c.innerHTML="";
+  cascadeEl.innerHTML="";
   images.forEach((src,i)=>{
     const img=document.createElement("img");
     img.src=src;
     img.style.zIndex=10+i;
-    c.appendChild(img);
-    setTimeout(()=>{
+    cascadeEl.appendChild(img);
+    requestAnimationFrame(()=>{
       img.style.opacity=1;
       img.style.transform=`translateY(${i*16}px)`;
-    },i*200);
+    });
   });
 }
 
@@ -276,20 +287,21 @@ function loop(t){
       flyWords();
     }
     if(beat%16===0){
-      drop();cascade();
-      rationale.classList.add("show");
+      bodyEl.classList.add("active");
+      drop(); cascade();
       image.src=images[idx++%images.length];
+      rationale.classList.add("show");
     }
     if(beat%LOOP===0){
       quizText.classList.remove("show");
-      cascade.innerHTML="";
+      cascadeEl.innerHTML="";
       rationale.classList.remove("show");
+      bodyEl.classList.remove("active");
     }
   }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 </script>
-
 </body>
 </html>
