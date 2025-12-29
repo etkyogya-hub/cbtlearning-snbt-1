@@ -1,0 +1,73 @@
+name: Render HTML to MP4
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install Puppeteer & FFmpeg
+      run: |
+        npm init -y
+        npm install puppeteer
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+
+    - name: Render frames
+      run: |
+        mkdir frames
+        node << 'EOF'
+        const puppeteer = require("puppeteer");
+
+        (async () => {
+          const browser = await puppeteer.launch({
+            headless: "new",
+            args: ["--no-sandbox"]
+          });
+
+          const page = await browser.newPage();
+          await page.setViewport({
+            width: 1080,
+            height: 1920,
+            deviceScaleFactor: 2
+          });
+
+          await page.goto("file://" + process.cwd() + "/index.html", {
+            waitUntil: "networkidle0"
+          });
+
+          await page.waitForTimeout(1000);
+
+          const frames = 300; // 10 detik @30fps
+          for (let i = 0; i < frames; i++) {
+            await page.screenshot({
+              path: `frames/frame_${String(i).padStart(4,"0")}.png`
+            });
+            await page.waitForTimeout(33);
+          }
+
+          await browser.close();
+        })();
+        EOF
+
+    - name: Convert frames to MP4
+      run: |
+        ffmpeg -framerate 30 -i frames/frame_%04d.png \
+        -c:v libx264 -pix_fmt yuv420p \
+        -movflags +faststart output.mp4
+
+    - name: Upload MP4
+      uses: actions/upload-artifact@v4
+      with:
+        name: tiktok-video
+        path: output.mp4
